@@ -3,12 +3,12 @@
 
 import config
 from data import *
+from lr_scheduler import LinearWarmupCosineAnnealingLR
 from monai.losses import DiceLoss
 from monai.metrics import DiceMetric
 from monai.transforms import AsDiscrete
 from monai.utils.enums import MetricReduction
 from torch import optim as optim
-from torch.optim.lr_scheduler import CosineAnnealingLR
 from train import train_model
 from swin_unetr import SwinUNETR
 
@@ -58,7 +58,11 @@ def main() -> None:
     )
 
     # define lr scheduler
-    scheduler = CosineAnnealingLR(optimizer=optimizer, T_max=config.N_EPOCHS)
+    scheduler = LinearWarmupCosineAnnealingLR(
+        optimizer=optimizer,
+        warmup_epochs=config.WARMUP_EPOCHS,
+        max_epochs=config.N_EPOCHS,
+    )
 
     # loss fn (train)
     loss_fn = DiceLoss(
