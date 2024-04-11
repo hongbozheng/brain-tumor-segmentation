@@ -20,7 +20,7 @@ def train_epoch(
 
     loader_tqdm = tqdm(iterable=train_loader, position=1)
     loader_tqdm.set_description(
-        desc=f"[Batch -]: {'-'*19}",
+        desc=f"[Batch 0]:  ",
         refresh=True
     )
 
@@ -35,7 +35,7 @@ def train_epoch(
         optimizer.step()
         loss_meter.update(val=loss.item(), n=data.shape[0])
         loader_tqdm.set_description(
-            desc=f"[Batch {idx}]: train loss {loss_meter.avg:.6f}",
+            desc=f"[Batch {idx+1}]: train loss {loss_meter.avg:.6f}",
             refresh=True
         )
 
@@ -44,26 +44,28 @@ def train_epoch(
 
 def train_model(
         model: nn.Module,
+        device,
         ckpt_filepath: str,
         optimizer: optim.Optimizer,
         scheduler: optim.lr_scheduler.LRScheduler,
+        n_epochs: int,
         loss_fn,
-        postproc_fn,
         acc_fn,
         train_loader: DataLoader,
         val_loader: DataLoader,
 ) -> None:
-    if not os.path.exists(path=config.MODEL_DIR):
-        os.makedirs(name=config.MODEL_DIR, exist_ok=True)
+    path, _ = os.path.split(p=ckpt_filepath)
+    if not os.path.exists(path=path):
+        os.makedirs(name=path, exist_ok=True)
 
-    model.to(device=config.DEVICE)
+    model.to(device=device)
 
     start_epoch = 0
     avg_dice_losses = []
     avg_dice_scores = []
 
     if os.path.exists(path=ckpt_filepath):
-        ckpt = torch.load(f=ckpt_filepath, map_location=config.DEVICE)
+        ckpt = torch.load(f=ckpt_filepath, map_location=device)
         model.load_state_dict(state_dict=ckpt["model_state"])
         optimizer.load_state_dict(state_dict=ckpt["optimizer_state"])
         scheduler.load_state_dict(state_dict=ckpt["scheduler_state"])
@@ -72,7 +74,7 @@ def train_model(
         filename = os.path.basename(ckpt_filepath)
         logger.log_info(f"Loaded '{filename}'")
 
-    epoch_tqdm = tqdm(iterable=range(start_epoch, config.N_EPOCHS), position=0)
+    epoch_tqdm = tqdm(iterable=range(start_epoch, n_epochs), position=0)
 
     for epoch in epoch_tqdm:
         epoch_tqdm.set_description(desc=f"[Epoch {epoch}]", refresh=True)
@@ -87,7 +89,6 @@ def train_model(
         dice_scores = val_epoch(
             model=model,
             val_loader=val_loader,
-            postproc_fn=postproc_fn,
             acc_fn=acc_fn,
         )
         avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
