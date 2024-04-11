@@ -9,7 +9,7 @@ from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
 from torch import optim as optim
 from train import train_model
-from swin_unetr import SwinUNETR
+from unetr_pp.unetr_pp import UNETR_PP
 
 
 def main() -> None:
@@ -29,33 +29,32 @@ def main() -> None:
         batch_size=config.TRAIN.BATCH_SIZE,
         num_workers=config.TRAIN.NUM_WORKERS,
         pin_memory=config.TRAIN.PIN_MEMORY,
-        roi=config.MODEL.SWIN.ROI,
+        roi=config.MODEL.UNETRPP.ROI,
     )
 
-    # define model
-    model = SwinUNETR(
-        img_size=config.MODEL.SWIN.ROI,
-        in_channels=config.MODEL.SWIN.IN_CHANNELS,
-        out_channels=config.MODEL.SWIN.OUT_CHANNELS,
-        depths=config.MODEL.SWIN.DEPTHS,
-        num_heads=config.MODEL.SWIN.NUM_HEADS,
-        feature_size=config.MODEL.SWIN.FEATURE_SIZE,
-        norm_name=config.MODEL.SWIN.NORM_NAME,
-        drop_rate=config.MODEL.SWIN.DROP_RATE,
-        attn_drop_rate=config.MODEL.SWIN.ATTN_DROP_RATE,
-        dropout_path_rate=config.MODEL.SWIN.DROPOUT_PATH_RATE,
-        normalize=config.MODEL.SWIN.NORMALIZE,
-        use_checkpoint=config.MODEL.SWIN.USE_CHECKPOINT,
-        spatial_dims=config.MODEL.SWIN.SPATIAL_DIMS,
-        downsample=config.MODEL.SWIN.DOWNSAMPLE,
-        use_v2=config.MODEL.SWIN.USE_V2,
-    ).to(device=DEVICE)
+    # define model (has to be these parameters, otherwise doesn't work, i donno why)
+    model = UNETR_PP(
+        in_channels=config.IN_CHANNELS,
+        out_channels=config.OUT_CHANNELS,
+        feature_size=16,
+        hidden_size=256,
+        num_heads=4,
+        pos_embed="perceptron",
+        norm_name=config.NORM_NAME,
+        dropout_rate=config.DROPOUT_RATE,
+        depths=[3, 3, 3, 3],
+        dims=config.DIMS,
+        conv_op=config.CONV_OP,
+        do_ds=False,
+    )
 
     # define optimizer
-    optimizer = optim.AdamW(
+    optimizer = optim.SGD(
         params=model.parameters(),
-        lr=config.MODEL.SWIN.LR,
-        weight_decay=config.MODEL.SWIN.WEIGHT_DECAY,
+        lr=config.MODEL.UNETRPP.LR,
+        momentum=config.MODEL.UNETRPP.MOMENTUM,
+        weight_decay=config.MODEL.UNETRPP.WEIGHT_DECAY,
+        nesterov=config.MODEL.UNETRPP.NESTEROV,
     )
 
     # define lr scheduler
@@ -83,7 +82,7 @@ def main() -> None:
     train_model(
         model=model,
         device=DEVICE,
-        ckpt_filepath=config.SAVE.SWIN_BEST_MODEL,
+        ckpt_filepath=config.SAVE.UNETRPP_BEST_MODEL,
         optimizer=optimizer,
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,

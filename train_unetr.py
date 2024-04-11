@@ -9,7 +9,7 @@ from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
 from torch import optim as optim
 from train import train_model
-from swin_unetr import SwinUNETR
+from unetr import UNETR
 
 
 def main() -> None:
@@ -33,29 +33,29 @@ def main() -> None:
     )
 
     # define model
-    model = SwinUNETR(
-        img_size=config.MODEL.SWIN.ROI,
-        in_channels=config.MODEL.SWIN.IN_CHANNELS,
-        out_channels=config.MODEL.SWIN.OUT_CHANNELS,
-        depths=config.MODEL.SWIN.DEPTHS,
-        num_heads=config.MODEL.SWIN.NUM_HEADS,
-        feature_size=config.MODEL.SWIN.FEATURE_SIZE,
-        norm_name=config.MODEL.SWIN.NORM_NAME,
-        drop_rate=config.MODEL.SWIN.DROP_RATE,
-        attn_drop_rate=config.MODEL.SWIN.ATTN_DROP_RATE,
-        dropout_path_rate=config.MODEL.SWIN.DROPOUT_PATH_RATE,
-        normalize=config.MODEL.SWIN.NORMALIZE,
-        use_checkpoint=config.MODEL.SWIN.USE_CHECKPOINT,
-        spatial_dims=config.MODEL.SWIN.SPATIAL_DIMS,
-        downsample=config.MODEL.SWIN.DOWNSAMPLE,
-        use_v2=config.MODEL.SWIN.USE_V2,
+    model = UNETR(
+        in_channels=config.MODEL.UNETR.IN_CHANNELS,
+        out_channels=config.MODEL.UNETR.OUT_CHANNELS,
+        img_size=config.MODEL.UNETR.ROI,
+        feature_size=config.MODEL.UNETR.FEATURE_SIZE,
+        hidden_size=config.MODEL.UNETR.HIDDEN_SIZE,
+        mlp_dim=config.MODEL.UNETR.MLP_DIM,
+        num_heads=config.MODEL.UNETR.NUM_HEADS,
+        pos_embed=config.MODEL.UNETR.POS_EMBED,
+        norm_name=config.MODEL.UNETR.NORM_NAME,
+        conv_block=config.MODEL.UNETR.CONV_BLOCK,
+        res_block=config.MODEL.UNETR.RES_BLOCK,
+        dropout_rate=config.MODEL.UNETR.DROPOUT_RATE,
+        spatial_dims=config.MODEL.UNETR.SPATIAL_DIMS,
+        qkv_bias=config.MODEL.UNETR.QKV_BIAS,
+        save_attn=config.MODEL.UNETR.SAVE_ATTN,
     ).to(device=DEVICE)
 
     # define optimizer
     optimizer = optim.AdamW(
         params=model.parameters(),
-        lr=config.MODEL.SWIN.LR,
-        weight_decay=config.MODEL.SWIN.WEIGHT_DECAY,
+        lr=config.MODEL.UNETR.LR,
+        weight_decay=config.MODEL.UNETR.WEIGHT_DECAY,
     )
 
     # define lr scheduler
@@ -83,7 +83,7 @@ def main() -> None:
     train_model(
         model=model,
         device=DEVICE,
-        ckpt_filepath=config.SAVE.SWIN_BEST_MODEL,
+        ckpt_filepath=config.SAVE.UNETR_BEST_MODEL,
         optimizer=optimizer,
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,

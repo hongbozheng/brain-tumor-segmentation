@@ -9,7 +9,7 @@ from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
 from torch import optim as optim
 from train import train_model
-from swin_unetr import SwinUNETR
+from unet3d import UNet3D
 
 
 def main() -> None:
@@ -33,26 +33,13 @@ def main() -> None:
     )
 
     # define model
-    model = SwinUNETR(
-        img_size=config.MODEL.SWIN.ROI,
-        in_channels=config.MODEL.SWIN.IN_CHANNELS,
-        out_channels=config.MODEL.SWIN.OUT_CHANNELS,
-        depths=config.MODEL.SWIN.DEPTHS,
-        num_heads=config.MODEL.SWIN.NUM_HEADS,
-        feature_size=config.MODEL.SWIN.FEATURE_SIZE,
-        norm_name=config.MODEL.SWIN.NORM_NAME,
-        drop_rate=config.MODEL.SWIN.DROP_RATE,
-        attn_drop_rate=config.MODEL.SWIN.ATTN_DROP_RATE,
-        dropout_path_rate=config.MODEL.SWIN.DROPOUT_PATH_RATE,
-        normalize=config.MODEL.SWIN.NORMALIZE,
-        use_checkpoint=config.MODEL.SWIN.USE_CHECKPOINT,
-        spatial_dims=config.MODEL.SWIN.SPATIAL_DIMS,
-        downsample=config.MODEL.SWIN.DOWNSAMPLE,
-        use_v2=config.MODEL.SWIN.USE_V2,
+    model = UNet3D(
+        kernels=config.MODEL.UNET3D.KERNELS,
+        strides=config.MODEL.UNET3D.STRIDES,
     ).to(device=DEVICE)
 
     # define optimizer
-    optimizer = optim.AdamW(
+    optimizer = optim.Adam(
         params=model.parameters(),
         lr=config.MODEL.SWIN.LR,
         weight_decay=config.MODEL.SWIN.WEIGHT_DECAY,

@@ -9,7 +9,7 @@ from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
 from torch import optim as optim
 from train import train_model
-from swin_unetr import SwinUNETR
+from nnformer.nnFormer import nnFormer
 
 
 def main() -> None:
@@ -29,33 +29,30 @@ def main() -> None:
         batch_size=config.TRAIN.BATCH_SIZE,
         num_workers=config.TRAIN.NUM_WORKERS,
         pin_memory=config.TRAIN.PIN_MEMORY,
-        roi=config.MODEL.SWIN.ROI,
+        roi=config.MODEL.NNFORMER.CROP_SIZE,
     )
 
     # define model
-    model = SwinUNETR(
-        img_size=config.MODEL.SWIN.ROI,
-        in_channels=config.MODEL.SWIN.IN_CHANNELS,
-        out_channels=config.MODEL.SWIN.OUT_CHANNELS,
-        depths=config.MODEL.SWIN.DEPTHS,
-        num_heads=config.MODEL.SWIN.NUM_HEADS,
-        feature_size=config.MODEL.SWIN.FEATURE_SIZE,
-        norm_name=config.MODEL.SWIN.NORM_NAME,
-        drop_rate=config.MODEL.SWIN.DROP_RATE,
-        attn_drop_rate=config.MODEL.SWIN.ATTN_DROP_RATE,
-        dropout_path_rate=config.MODEL.SWIN.DROPOUT_PATH_RATE,
-        normalize=config.MODEL.SWIN.NORMALIZE,
-        use_checkpoint=config.MODEL.SWIN.USE_CHECKPOINT,
-        spatial_dims=config.MODEL.SWIN.SPATIAL_DIMS,
-        downsample=config.MODEL.SWIN.DOWNSAMPLE,
-        use_v2=config.MODEL.SWIN.USE_V2,
-    ).to(device=DEVICE)
+    model = nnFormer(
+        crop_size=config.MODEL.NNFORMER.CROP_SIZE,
+        embedding_dim=config.MODEL.NNFORMER.EMBEDDING_DIM,
+        input_channels=config.MODEL.NNFORMER.IN_CHANNELS,
+        num_classes=config.MODEL.NNFORMER.OUT_CHANNELS,
+        conv_op=config.MODEL.NNFORMER.CONV_OP,
+        depths=config.MODEL.NNFORMER.DEPTHS,
+        num_heads=config.MODEL.NNFORMER.NUM_HEADS,
+        patch_size=config.MODEL.NNFORMER.PATCH_SIZE,
+        window_size=config.MODEL.NNFORMER.WINDOW_SIZE,
+        deep_supervision=config.MODEL.NNFORMER.DEEP_SUPERVISION,
+    )
 
     # define optimizer
-    optimizer = optim.AdamW(
+    optimizer = optim.SGD(
         params=model.parameters(),
-        lr=config.MODEL.SWIN.LR,
-        weight_decay=config.MODEL.SWIN.WEIGHT_DECAY,
+        lr=config.MODEL.NNFORMER.LR,
+        momentum=config.MODEL.NNFORMER.MOMENTUM,
+        weight_decay=config.MODEL.NNFORMER.WEIGHT_DECAY,
+        nesterov=config.MODEL.NNFORMER.NESTEROV,
     )
 
     # define lr scheduler
@@ -83,7 +80,7 @@ def main() -> None:
     train_model(
         model=model,
         device=DEVICE,
-        ckpt_filepath=config.SAVE.SWIN_BEST_MODEL,
+        ckpt_filepath=config.SAVE.NNFORMER_BEST_MODEL,
         optimizer=optimizer,
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,
