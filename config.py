@@ -41,9 +41,9 @@ _C.MODEL.SWIN.WEIGHT_DECAY = 1e-5
 """ =============== UNETR =============== """
 _C.MODEL.UNETR = CN()
 _C.MODEL.UNETR.IN_CHANNELS = 4
-_C.MODEL.UNETR.OUT_CHANNELS = 3,
+_C.MODEL.UNETR.OUT_CHANNELS = 3
 _C.MODEL.UNETR.ROI = [128, 128, 128]
-_C.MODEL.UNETR.FEATURE_SIZE = 48
+_C.MODEL.UNETR.FEATURE_SIZE = 16
 _C.MODEL.UNETR.HIDDEN_SIZE = 768
 _C.MODEL.UNETR.MLP_DIM = 3072
 _C.MODEL.UNETR.NUM_HEADS = 12
@@ -106,6 +106,7 @@ _C.MODEL.NNFORMER.NESTEROV = True
 
 """ =============== UNet3D =============== """
 _C.MODEL.UNET3D = CN()
+_C.MODEL.UNET3D.ROI = [128, 128, 128]
 _C.MODEL.UNET3D.KERNELS = [
     [3, 3, 3],
     [3, 3, 3],
@@ -174,7 +175,7 @@ _C.SAVE.SWIN_BEST_MODEL = _C.SAVE.MODEL_DIR + "/swin_unetr_best.ckpt"
 _C.SAVE.UNETR_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unetr_best.ckpt"
 _C.SAVE.UNETRPP_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unetrpp_best.ckpt"
 _C.SAVE.NNFORMER_BEST_MODEL = _C.SAVE.MODEL_DIR + "/nnformer_best.ckpt"
-_C.SAVE.VNET_BEST_MODEL = _C.SAVE.MODEL_DIR + "/vnet_best.ckpt"
+_C.SAVE.UNET3D_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unet3d_best.ckpt"
 
 
 # -----------------------------------------------------------------------------

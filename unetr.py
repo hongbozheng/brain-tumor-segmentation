@@ -25,6 +25,7 @@ from monai.networks.blocks.unetr_block import UnetrBasicBlock, UnetrPrUpBlock, U
 from monai.networks.nets.vit import ViT
 from monai.utils import deprecated_arg, ensure_tuple_rep
 
+
 class UNETR(nn.Module):
     """
     UNETR based on: "Hatamizadeh et al.,

@@ -20,7 +20,7 @@ def train_epoch(
 
     loader_tqdm = tqdm(iterable=train_loader, position=1)
     loader_tqdm.set_description(
-        desc=f"[Batch 0]:  ",
+        desc=f"[Batch 0]",
         refresh=True
     )
 
@@ -50,6 +50,9 @@ def train_model(
         scheduler: optim.lr_scheduler.LRScheduler,
         n_epochs: int,
         loss_fn,
+        roi: tuple[int, int, int],
+        sw_batch_size: int,
+        overlap: float,
         acc_fn,
         train_loader: DataLoader,
         val_loader: DataLoader,
@@ -89,24 +92,27 @@ def train_model(
         dice_scores = val_epoch(
             model=model,
             val_loader=val_loader,
+            roi=roi,
+            sw_batch_size=sw_batch_size,
+            overlap=overlap,
             acc_fn=acc_fn,
         )
         avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
         avg_dice_scores.append(avg_dice_score)
 
-        if avg_dice_scores[-1] == max(avg_dice_scores):
-            torch.save(
-                obj={
-                    "model_description": str(model),
-                    "model_state": model.state_dict(),
-                    "optimizer_state": optimizer.state_dict(),
-                    "scheduler_state": scheduler.state_dict(),
-                    "epoch": epoch,
-                    "best_dice": avg_dice_scores[-1],
-                },
-                f=ckpt_filepath,
-            )
+        # if avg_dice_scores[-1] == max(avg_dice_scores):
+        #     torch.save(
+        #         obj={
+        #             "model_description": str(model),
+        #             "model_state": model.state_dict(),
+        #             "optimizer_state": optimizer.state_dict(),
+        #             "scheduler_state": scheduler.state_dict(),
+        #             "epoch": epoch,
+        #             "best_dice": avg_dice_scores[-1],
+        #         },
+        #         f=ckpt_filepath,
+        #     )
 
-        scheduler.step()
+        # scheduler.step()
 
     return

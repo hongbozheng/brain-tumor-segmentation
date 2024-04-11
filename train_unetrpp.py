@@ -34,18 +34,18 @@ def main() -> None:
 
     # define model (has to be these parameters, otherwise doesn't work, i donno why)
     model = UNETR_PP(
-        in_channels=config.IN_CHANNELS,
-        out_channels=config.OUT_CHANNELS,
-        feature_size=16,
-        hidden_size=256,
-        num_heads=4,
-        pos_embed="perceptron",
-        norm_name=config.NORM_NAME,
-        dropout_rate=config.DROPOUT_RATE,
-        depths=[3, 3, 3, 3],
-        dims=config.DIMS,
-        conv_op=config.CONV_OP,
-        do_ds=False,
+        in_channels=config.MODEL.UNETRPP.IN_CHANNELS,
+        out_channels=config.MODEL.UNETRPP.OUT_CHANNELS,
+        feature_size=config.MODEL.UNETRPP.FEATURE_SIZE,
+        hidden_size=config.MODEL.UNETRPP.HIDDEN_SIZE,
+        num_heads=config.MODEL.UNETRPP.NUM_HEADS,
+        pos_embed=config.MODEL.UNETRPP.POS_EMBED,
+        norm_name=config.MODEL.UNETRPP.NORM_NAME,
+        dropout_rate=config.MODEL.UNETRPP.DROPOUT_RATE,
+        depths=config.MODEL.UNETRPP.DEPTHS,
+        dims=config.MODEL.UNETRPP.DIMS,
+        # conv_op=config.CONV_OP,
+        do_ds=config.MODEL.UNETRPP.DO_DS,
     )
 
     # define optimizer
@@ -87,6 +87,9 @@ def main() -> None:
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,
         loss_fn=loss_fn,
+        roi=config.MODEL.UNETRPP.ROI,
+        sw_batch_size=config.VAL.SW_BATCH_SIZE,
+        overlap=config.VAL.OVERLAP,
         acc_fn=acc_fn,
         train_loader=train_loader,
         val_loader=val_loader,

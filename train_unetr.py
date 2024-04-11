@@ -29,7 +29,7 @@ def main() -> None:
         batch_size=config.TRAIN.BATCH_SIZE,
         num_workers=config.TRAIN.NUM_WORKERS,
         pin_memory=config.TRAIN.PIN_MEMORY,
-        roi=config.MODEL.SWIN.ROI,
+        roi=config.MODEL.UNETR.ROI,
     )
 
     # define model
@@ -41,7 +41,7 @@ def main() -> None:
         hidden_size=config.MODEL.UNETR.HIDDEN_SIZE,
         mlp_dim=config.MODEL.UNETR.MLP_DIM,
         num_heads=config.MODEL.UNETR.NUM_HEADS,
-        pos_embed=config.MODEL.UNETR.POS_EMBED,
+        proj_type=config.MODEL.UNETR.PROJ_TYPE,
         norm_name=config.MODEL.UNETR.NORM_NAME,
         conv_block=config.MODEL.UNETR.CONV_BLOCK,
         res_block=config.MODEL.UNETR.RES_BLOCK,
@@ -88,6 +88,9 @@ def main() -> None:
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,
         loss_fn=loss_fn,
+        roi=config.MODEL.UNETR.ROI,
+        sw_batch_size=config.VAL.SW_BATCH_SIZE,
+        overlap=config.VAL.OVERLAP,
         acc_fn=acc_fn,
         train_loader=train_loader,
         val_loader=val_loader,

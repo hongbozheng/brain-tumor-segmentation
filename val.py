@@ -11,13 +11,16 @@ from tqdm import tqdm
 def val_epoch(
         model: nn.Module,
         val_loader: DataLoader,
+        roi: tuple[int, int, int],
+        sw_batch_size: int,
+        overlap: float,
         acc_fn,
 ) -> float:
     model.eval()
 
     loader_tqdm = tqdm(iterable=val_loader, position=1)
     loader_tqdm.set_description(
-        desc=f"[Batch 0]:  ",
+        desc=f"[Batch 0]",
         refresh=True
     )
 
@@ -29,10 +32,10 @@ def val_epoch(
             target = batch["label"].to(device=config.DEVICE)
             logits_batch = sliding_window_inference(
                 inputs=data,
-                roi_size=config.ROI,
-                sw_batch_size=config.SW_BATCH_SIZE,
+                roi_size=roi,
+                sw_batch_size=sw_batch_size,
                 predictor=model,
-                overlap=config.OVERLAP,
+                overlap=overlap,
             )
             # Note: if batch size > 1, need decollect_batch
             preds = [
