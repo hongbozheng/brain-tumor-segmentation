@@ -34,6 +34,7 @@ def main() -> None:
 
     # define model
     model = UNet3D(
+        in_channels=config.MODEL.UNET3D.IN_CHANNELS,
         kernels=config.MODEL.UNET3D.KERNELS,
         strides=config.MODEL.UNET3D.STRIDES,
     ).to(device=DEVICE)

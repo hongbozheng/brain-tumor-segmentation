@@ -136,6 +136,7 @@ class OutputBlock(nn.Module):
 class UNet3D(nn.Module):
     def __init__(
         self,
+        in_channels,
         kernels,
         strides,
     ):
@@ -147,7 +148,11 @@ class UNet3D(nn.Module):
         self.filters = [64, 128, 256, 512, 768, 1024, 2048][:len(strides)]
 
         down_block = ConvBlock
-        self.input_block = InputBlock(5, self.filters[0], norm=self.norm)
+        self.input_block = InputBlock(
+            in_channels=in_channels,
+            out_channels=self.filters[0],
+            norm=self.norm
+        )
         self.downsamples = self.get_module_list(
             conv_block=down_block,
             in_channels=self.filters[:-1],

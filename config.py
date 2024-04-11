@@ -106,6 +106,7 @@ _C.MODEL.NNFORMER.NESTEROV = True
 
 """ =============== UNet3D =============== """
 _C.MODEL.UNET3D = CN()
+_C.MODEL.UNET3D.IN_CHANNELS = 4
 _C.MODEL.UNET3D.ROI = [128, 128, 128]
 _C.MODEL.UNET3D.KERNELS = [
     [3, 3, 3],
