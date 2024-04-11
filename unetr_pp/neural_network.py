@@ -820,14 +820,59 @@ class SegmentationNetwork(NeuralNetwork):
 
 
 if __name__ == '__main__':
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (162, 529, 529), 0.5))
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (162, 529, 529), 1))
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (162, 529, 529), 0.1))
-
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (60, 448, 224), 1))
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (60, 448, 224), 0.5))
-
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (30, 224, 224), 1))
-    print(SegmentationNetwork._compute_steps_for_sliding_window((30, 224, 224), (30, 224, 224), 0.125))
-
-    print(SegmentationNetwork._compute_steps_for_sliding_window((123, 54, 123), (246, 162, 369), 0.25))
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(162, 529, 529),
+            step_size=0.5
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(162, 529, 529),
+            step_size=1
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(162, 529, 529),
+            step_size=0.1
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(60, 448, 224),
+            step_size=1
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(60, 448, 224),
+            step_size=0.5
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(30, 224, 224),
+            step_size=1
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(30, 224, 224),
+            image_size=(30, 224, 224),
+            step_size=0.125
+        )
+    )
+    print(
+        SegmentationNetwork._compute_steps_for_sliding_window(
+            patch_size=(123, 54, 123),
+            image_size=(246, 162, 369),
+            step_size= 0.25
+        )
+    )
