@@ -5,18 +5,39 @@
 ##### Swin-UNETR
 swin_unetr.py
 
+[GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/swin_unetr.py)
+
+[paper](https://arxiv.org/abs/2201.01266)
+
 ##### UNETR
 unetr.py
 
+[GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/unetr.py)
+
+[paper](https://arxiv.org/abs/2103.10504)
+
 ##### UNETR++
-unetrpp.py
+unetr_pp/
+
+[GitHub](https://github.com/Amshaker/unetr_plus_plus)
+
+[paper](https://arxiv.org/abs/2212.04497)
 
 ##### nnFormer
 nnformer/
 
+[GitHub](https://github.com/282857341/nnFormer)
+
+[paper](https://arxiv.org/abs/2109.03201)
+
 #### CNN
 ##### 3D-UNet
 unet3d.py
+
+[GitHub](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Segmentation/nnUNet)
+
+[paper](https://arxiv.org/abs/2110.03352)
+
 
 ## Evaluation
 The model will predict 3 classes
