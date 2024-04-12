@@ -35,15 +35,19 @@ def main() -> None:
     # define model
     model = UNet3D(
         in_channels=config.MODEL.UNET3D.IN_CHANNELS,
+        n_class=config.MODEL.UNET3D.N_CLASS,
         kernels=config.MODEL.UNET3D.KERNELS,
         strides=config.MODEL.UNET3D.STRIDES,
+        norm=config.MODEL.UNET3D.NORM,
+        dim=config.MODEL.UNET3D.DIM,
+        deep_supervision=config.MODEL.UNET3D.DEEP_SUPERVISION,
     ).to(device=DEVICE)
 
     # define optimizer
     optimizer = optim.Adam(
         params=model.parameters(),
-        lr=config.MODEL.SWIN.LR,
-        weight_decay=config.MODEL.SWIN.WEIGHT_DECAY,
+        lr=config.MODEL.UNET3D.LR,
+        weight_decay=config.MODEL.UNET3D.WEIGHT_DECAY,
     )
 
     # define lr scheduler

@@ -29,32 +29,32 @@ def main() -> None:
         batch_size=config.TRAIN.BATCH_SIZE,
         num_workers=config.TRAIN.NUM_WORKERS,
         pin_memory=config.TRAIN.PIN_MEMORY,
-        roi=config.MODEL.UNETRPP.ROI,
+        roi=config.MODEL.UNETR_PP.ROI,
     )
 
     # define model (has to be these parameters, otherwise doesn't work, i donno why)
     model = UNETR_PP(
-        in_channels=config.MODEL.UNETRPP.IN_CHANNELS,
-        out_channels=config.MODEL.UNETRPP.OUT_CHANNELS,
-        feature_size=config.MODEL.UNETRPP.FEATURE_SIZE,
-        hidden_size=config.MODEL.UNETRPP.HIDDEN_SIZE,
-        num_heads=config.MODEL.UNETRPP.NUM_HEADS,
-        pos_embed=config.MODEL.UNETRPP.POS_EMBED,
-        norm_name=config.MODEL.UNETRPP.NORM_NAME,
-        dropout_rate=config.MODEL.UNETRPP.DROPOUT_RATE,
-        depths=config.MODEL.UNETRPP.DEPTHS,
-        dims=config.MODEL.UNETRPP.DIMS,
+        in_channels=config.MODEL.UNETR_PP.IN_CHANNELS,
+        out_channels=config.MODEL.UNETR_PP.OUT_CHANNELS,
+        feature_size=config.MODEL.UNETR_PP.FEATURE_SIZE,
+        hidden_size=config.MODEL.UNETR_PP.HIDDEN_SIZE,
+        num_heads=config.MODEL.UNETR_PP.NUM_HEADS,
+        pos_embed=config.MODEL.UNETR_PP.POS_EMBED,
+        norm_name=config.MODEL.UNETR_PP.NORM_NAME,
+        dropout_rate=config.MODEL.UNETR_PP.DROPOUT_RATE,
+        depths=config.MODEL.UNETR_PP.DEPTHS,
+        dims=config.MODEL.UNETR_PP.DIMS,
         # conv_op=config.CONV_OP,
-        do_ds=config.MODEL.UNETRPP.DO_DS,
+        do_ds=config.MODEL.UNETR_PP.DO_DS,
     )
 
     # define optimizer
     optimizer = optim.SGD(
         params=model.parameters(),
-        lr=config.MODEL.UNETRPP.LR,
-        momentum=config.MODEL.UNETRPP.MOMENTUM,
-        weight_decay=config.MODEL.UNETRPP.WEIGHT_DECAY,
-        nesterov=config.MODEL.UNETRPP.NESTEROV,
+        lr=config.MODEL.UNETR_PP.LR,
+        momentum=config.MODEL.UNETR_PP.MOMENTUM,
+        weight_decay=config.MODEL.UNETR_PP.WEIGHT_DECAY,
+        nesterov=config.MODEL.UNETR_PP.NESTEROV,
     )
 
     # define lr scheduler
@@ -84,12 +84,12 @@ def main() -> None:
     train_model(
         model=model,
         device=DEVICE,
-        ckpt_filepath=config.SAVE.UNETRPP_BEST_MODEL,
+        ckpt_filepath=config.SAVE.UNETR_PP_BEST_MODEL,
         optimizer=optimizer,
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,
         loss_fn=loss_fn,
-        roi=config.MODEL.UNETRPP.ROI,
+        roi=config.MODEL.UNETR_PP.ROI,
         sw_batch_size=config.VAL.SW_BATCH_SIZE,
         overlap=config.VAL.OVERLAP,
         acc_fn=acc_fn,
