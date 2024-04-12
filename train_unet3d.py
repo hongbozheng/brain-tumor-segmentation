@@ -51,6 +51,8 @@ def main() -> None:
         optimizer=optimizer,
         warmup_epochs=config.TRAIN.WARMUP_EPOCHS,
         max_epochs=config.TRAIN.N_EPOCHS,
+        warmup_start_lr=config.TRAIN.WARMUP_START_LR,
+        eta_min=config.TRAIN.ETA_MIN,
     )
 
     # loss fn (train)
