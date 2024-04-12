@@ -5,45 +5,61 @@
 ##### Swin-UNETR
 swin_unetr.py
 
-[GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/swin_unetr.py)
-
-[paper](https://arxiv.org/abs/2201.01266)
+[GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/swin_unetr.py) & [paper](https://arxiv.org/abs/2201.01266)
 
 ##### UNETR
 unetr.py
 
-[GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/unetr.py)
-
-[paper](https://arxiv.org/abs/2103.10504)
+[GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/unetr.py) & [paper](https://arxiv.org/abs/2103.10504)
 
 ##### UNETR++
 unetr_pp/
 
-[GitHub](https://github.com/Amshaker/unetr_plus_plus)
-
-[paper](https://arxiv.org/abs/2212.04497)
+[GitHub](https://github.com/Amshaker/unetr_plus_plus) & [paper](https://arxiv.org/abs/2212.04497)
 
 ##### nnFormer
 nnformer/
 
-[GitHub](https://github.com/282857341/nnFormer)
-
-[paper](https://arxiv.org/abs/2109.03201)
+[GitHub](https://github.com/282857341/nnFormer) & [paper](https://arxiv.org/abs/2109.03201)
 
 #### CNN
 ##### 3D-UNet
 unet3d.py
 
-[GitHub](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Segmentation/nnUNet)
+[GitHub](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Segmentation/nnUNet) & [paper](https://arxiv.org/abs/2110.03352)
 
-[paper](https://arxiv.org/abs/2110.03352)
+
+## Data
+#### BraTS_2023
+[Kaggle BraTS_2023 Part 1](https://www.kaggle.com/datasets/aiocta/brats2023-part-1) &
+[Kaggle BraTS_2023 Part 2](https://www.kaggle.com/datasets/aiocta/brats2023-part-2zip)
+
+1. Download and unzip both files
+2. Create folder `BraTS_2023` and move all files into this folder
+
+##### Statistics
+- `Total #`: 1251
+- `Train #`: 1001 (~80%)
+- `Val #`: 250 (~20%)
+- `Total Size`: 147.44GB
+
+##### Labels
+- `label 1` -> necrotic and non-enhancing tumor core
+- `label 2` -> peritumoral edema
+- `label 4` -> GD-enhancing tumor
+
+##### Classes
+- `TC` -> Tumor Core
+  - `Label 1` & `Label 4`
+- `WT` -> Whole Tumor
+  - `Label 1` & `Label 2` & `Label 4`
+- `ET` -> Enhancing Tumor
+  - `Label 4`
 
 
 ## Evaluation
-The model will predict 3 classes
-- Enhancing Tumor (ET)
-- Tumor Core (TC)
-- Whole Tumor (WT)
+Dice Similarity Coefficient (Dice Score)
+
 
 ## Project Structure
 ```
