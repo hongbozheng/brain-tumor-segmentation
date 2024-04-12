@@ -26,10 +26,11 @@ def main() -> None:
     train_loader, val_loader = loader(
         train_data=train_data,
         val_data=val_data,
-        batch_size=config.TRAIN.BATCH_SIZE,
+        train_batch_size=config.TRAIN.BATCH_SIZE,
+        val_batch_size=config.VAL.BATCH_SIZE,
         num_workers=config.TRAIN.NUM_WORKERS,
         pin_memory=config.TRAIN.PIN_MEMORY,
-        roi=config.MODEL.SWIN.ROI,
+        roi=config.MODEL.NNFORMER.CROP_SIZE,
     )
 
     # define model
@@ -49,7 +50,7 @@ def main() -> None:
         spatial_dims=config.MODEL.SWIN.SPATIAL_DIMS,
         downsample=config.MODEL.SWIN.DOWNSAMPLE,
         use_v2=config.MODEL.SWIN.USE_V2,
-    ).to(device=DEVICE)
+    )
 
     # define optimizer
     optimizer = optim.AdamW(

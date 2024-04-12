@@ -1,4 +1,5 @@
 import config
+import logger
 import numpy as np
 import torch
 import torch.nn as nn
@@ -60,3 +61,37 @@ def val_epoch(
             )
 
     return acc_meter.avg
+
+
+def val_model(
+        model: nn.Module,
+        device,
+        ckpt_filepath: str,
+        roi: tuple[int, int, int],
+        sw_batch_size: int,
+        overlap: float,
+        acc_fn,
+        val_loader: DataLoader,
+) -> np.ndarray:
+    model.to(device=device)
+
+    if os.path.exists(path=ckpt_filepath):
+        ckpt = torch.load(f=ckpt_filepath, map_location=device)
+        model.load_state_dict(state_dict=ckpt["model_state"])
+        filename = os.path.basename(ckpt_filepath)
+        logger.log_info(f"Loaded '{filename}'")
+    else:
+        logger.log_error(f"Cannot find ckpt file at '{ckpt_filepath}'.")
+        exit(1)
+
+    dice_scores = val_epoch(
+        model=model,
+        val_loader=val_loader,
+        roi=roi,
+        sw_batch_size=sw_batch_size,
+        overlap=overlap,
+        acc_fn=acc_fn,
+    )
+    avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
+
+    return avg_dice_score

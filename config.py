@@ -166,6 +166,7 @@ _C.TRAIN.ETA_MIN = 1e-7
 _C.VAL = CN()
 
 """ Validation """
+_C.VAL.BATCH_SIZE = 1
 _C.VAL.SW_BATCH_SIZE = 2
 _C.VAL.OVERLAP = 0.5
 
