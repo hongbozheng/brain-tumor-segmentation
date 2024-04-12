@@ -171,17 +171,17 @@ _C.VAL.OVERLAP = 0.5
 
 
 # -----------------------------------------------------------------------------
-# Save
+# Best Model
 # -----------------------------------------------------------------------------
-_C.SAVE = CN()
+_C.BEST_MODEL = CN()
 
 """ Model """
-_C.SAVE.MODEL_DIR = "models"
-_C.SAVE.SWIN_BEST_MODEL = _C.SAVE.MODEL_DIR + "/swin_unetr_best.ckpt"
-_C.SAVE.UNETR_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unetr_best.ckpt"
-_C.SAVE.UNETR_PP_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unetr_pp_best.ckpt"
-_C.SAVE.NNFORMER_BEST_MODEL = _C.SAVE.MODEL_DIR + "/nnformer_best.ckpt"
-_C.SAVE.UNET3D_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unet3d_best.ckpt"
+_C.BEST_MODEL.DIR = "models"
+_C.BEST_MODEL.SWIN = _C.BEST_MODEL.DIR + "/swin_unetr_best.ckpt"
+_C.BEST_MODEL.UNETR = _C.BEST_MODEL.DIR + "/unetr_best.ckpt"
+_C.BEST_MODEL.UNETR_PP = _C.BEST_MODEL.DIR + "/unetr_pp_best.ckpt"
+_C.BEST_MODEL.NNFORMER = _C.BEST_MODEL.DIR + "/nnformer_best.ckpt"
+_C.BEST_MODEL.UNET3D = _C.BEST_MODEL.DIR + "/unet3d_best.ckpt"
 
 
 # -----------------------------------------------------------------------------
@@ -190,7 +190,7 @@ _C.SAVE.UNET3D_BEST_MODEL = _C.SAVE.MODEL_DIR + "/unet3d_best.ckpt"
 _C.DATA = CN()
 
 """ BraTS 2023 """
-_C.DATA.DATA_DIR = "../BraTS_2023"
+_C.DATA.DIR = "../BraTS_2023"
 _C.DATA.VAL_PCT = 0.2
 
 

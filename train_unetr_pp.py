@@ -17,7 +17,7 @@ def main() -> None:
 
     # split data into train & val in dict format
     train_data, val_data = train_val_split(
-        data_dir=config.DATA.DATA_DIR,
+        data_dir=config.DATA.DIR,
         seed=SEED,
         val_pct=config.DATA.VAL_PCT,
     )
@@ -84,7 +84,7 @@ def main() -> None:
     train_model(
         model=model,
         device=DEVICE,
-        ckpt_filepath=config.SAVE.UNETR_PP_BEST_MODEL,
+        ckpt_filepath=config.BEST_MODEL.UNETR_PP,
         optimizer=optimizer,
         scheduler=scheduler,
         n_epochs=config.TRAIN.N_EPOCHS,
