@@ -13,6 +13,9 @@
 # limitations under the License.
 
 
+from collections.abc import Sequence
+
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -136,15 +139,19 @@ class OutputBlock(nn.Module):
 class UNet3D(nn.Module):
     def __init__(
         self,
-        in_channels,
-        kernels,
-        strides,
+        in_channels: int,
+        n_class: int,
+        kernels: Sequence[Sequence[int]],
+        strides: Sequence[Sequence[int]],
+        norm: str,
+        dim: int,
+        deep_supervision: bool,
     ):
         super(UNet3D, self).__init__()
-        self.dim = 3
-        self.n_class = 3
-        self.deep_supervision = True
-        self.norm = "instancenorm3d"
+        self.n_class = n_class
+        self.dim = dim
+        self.deep_supervision = deep_supervision
+        self.norm = norm
         self.filters = [64, 128, 256, 512, 768, 1024, 2048][:len(strides)]
 
         down_block = ConvBlock
