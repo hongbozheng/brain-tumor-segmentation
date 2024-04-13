@@ -134,44 +134,6 @@ _C.MODEL.UNET3D.WEIGHT_DECAY = 1e-4
 
 
 # -----------------------------------------------------------------------------
-# Hyperparams
-# -----------------------------------------------------------------------------
-SEED = 42
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-torch.manual_seed(seed=SEED)
-torch.cuda.manual_seed_all(seed=SEED)
-torch.backends.cudnn.benchmark = False
-torch.backends.cudnn.deterministic = True
-LOG_LEVEL = LogLevel.info
-
-
-# -----------------------------------------------------------------------------
-# Training
-# -----------------------------------------------------------------------------
-_C.TRAIN = CN()
-
-""" Training """
-_C.TRAIN.BATCH_SIZE = 1
-_C.TRAIN.NUM_WORKERS = 2
-_C.TRAIN.PIN_MEMORY = True
-_C.TRAIN.N_EPOCHS = 100
-_C.TRAIN.WARMUP_EPOCHS = 15
-_C.TRAIN.WARMUP_START_LR = 1e-5
-_C.TRAIN.ETA_MIN = 1e-7
-
-
-# -----------------------------------------------------------------------------
-# Validation
-# -----------------------------------------------------------------------------
-_C.VAL = CN()
-
-""" Validation """
-_C.VAL.BATCH_SIZE = 1
-_C.VAL.SW_BATCH_SIZE = 2
-_C.VAL.OVERLAP = 0.5
-
-
-# -----------------------------------------------------------------------------
 # Best Model
 # -----------------------------------------------------------------------------
 _C.BEST_MODEL = CN()
@@ -193,6 +155,54 @@ _C.DATA = CN()
 """ BraTS 2023 """
 _C.DATA.DIR = "../BraTS_2023"
 _C.DATA.VAL_PCT = 0.2
+_C.DATA.ROI = [128, 128, 128]
+
+
+# -----------------------------------------------------------------------------
+# Loader
+# -----------------------------------------------------------------------------
+_C.LOADER = CN()
+
+""" DataLoader """
+_C.LOADER.NUM_WORKERS = 2
+_C.LOADER.PIN_MEMORY = True
+
+
+# -----------------------------------------------------------------------------
+# Hyperparams
+# -----------------------------------------------------------------------------
+SEED = 42
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+torch.manual_seed(seed=SEED)
+torch.cuda.manual_seed_all(seed=SEED)
+torch.backends.cudnn.benchmark = False
+torch.backends.cudnn.deterministic = True
+LOG_LEVEL = LogLevel.info
+MODEL_NAMES = {"swin", "unetr", "unetr_pp", "nnformer", "unet3d"}
+
+
+# -----------------------------------------------------------------------------
+# Training
+# -----------------------------------------------------------------------------
+_C.TRAIN = CN()
+
+""" Training """
+_C.TRAIN.BATCH_SIZE = 1
+_C.TRAIN.N_EPOCHS = 100
+_C.TRAIN.WARMUP_EPOCHS = 15
+_C.TRAIN.WARMUP_START_LR = 1e-5
+_C.TRAIN.ETA_MIN = 1e-7
+
+
+# -----------------------------------------------------------------------------
+# Validation
+# -----------------------------------------------------------------------------
+_C.VAL = CN()
+
+""" Validation """
+_C.VAL.BATCH_SIZE = 1
+_C.VAL.SW_BATCH_SIZE = 2
+_C.VAL.OVERLAP = 0.5
 
 
 def get_config(args):

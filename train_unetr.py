@@ -2,12 +2,14 @@
 
 
 from config import SEED, DEVICE, get_config
-from data import *
+from data import train_val_split, train_transform, val_transform
+from dataset import BraTS
 from lr_scheduler import LinearWarmupCosineAnnealingLR
 from monai.losses import DiceLoss
 from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
 from torch import optim as optim
+from torch.utils.data import DataLoader
 from train import train_model
 from unetr import UNETR
 
@@ -22,15 +24,24 @@ def main() -> None:
         val_pct=config.DATA.VAL_PCT,
     )
 
-    # create train & val dataloaders
-    train_loader, val_loader = loader(
-        train_data=train_data,
-        val_data=val_data,
-        train_batch_size=config.TRAIN.BATCH_SIZE,
-        val_batch_size=config.VAL.BATCH_SIZE,
-        num_workers=config.TRAIN.NUM_WORKERS,
-        pin_memory=config.TRAIN.PIN_MEMORY,
-        roi=config.MODEL.NNFORMER.CROP_SIZE,
+    # dataset
+    train_dataset = BraTS(data=train_data, transform=train_transform)
+    val_dataset = BraTS(data=val_data, transform=val_transform)
+
+    # dataloader
+    train_loader = DataLoader(
+        dataset=train_dataset,
+        batch_size=config.TRAIN.BATCH_SIZE,
+        shuffle=True,
+        num_workers=config.LOADER.NUM_WORKERS,
+        pin_memory=config.LOADER.PIN_MEMORY,
+    )
+    val_loader = DataLoader(
+        dataset=val_dataset,
+        batch_size=config.VAL.BATCH_SIZE,
+        shuffle=False,
+        num_workers=config.LOADER.NUM_WORKERS,
+        pin_memory=config.LOADER.PIN_MEMORY,
     )
 
     # define model
