@@ -2,9 +2,9 @@
 
 
 import argparse
-import logger
 import numpy as np
 from config import SEED, DEVICE, MODEL_NAMES, get_config
+import logger
 from data import train_val_split, val_transform
 from dataset import BraTS
 from monai.metrics import DiceMetric
@@ -163,6 +163,7 @@ def main() -> None:
         overlap=config.VAL.OVERLAP,
         acc_fn=acc_fn,
     )
+
     avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
 
     logger.log_info(f"TC  Dice Score: {dice_scores[0]:.6f}")

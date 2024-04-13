@@ -105,6 +105,7 @@ def main() -> None:
         acc_fn=acc_fn,
         train_loader=train_loader,
         val_loader=val_loader,
+        stats_filepath="nnformer_" + config.TRAIN.STATS_FILEPATH,
     )
 
     return

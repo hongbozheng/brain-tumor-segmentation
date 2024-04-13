@@ -2,10 +2,10 @@
 
 
 import argparse
-import logger
 import os
 import torch
 from config import DEVICE, MODEL_NAMES, get_config
+import logger
 from data import image_label, val_transform
 from dataset import BraTS
 from nnformer.nnFormer import nnFormer

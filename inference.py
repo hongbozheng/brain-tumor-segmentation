@@ -6,6 +6,7 @@ from monai.inferers import sliding_window_inference
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+
 def inference(
         model: nn.Module,
         device,
@@ -34,25 +35,28 @@ def inference(
         refresh=True
     )
 
-    preds = []
-
     with torch.no_grad():
         for idx, batch in enumerate(iterable=loader_tqdm):
             data = batch["image"].to(device=device)
-            logits_batch = sliding_window_inference(
+            logits = sliding_window_inference(
                 inputs=data,
                 roi_size=roi,
                 sw_batch_size=sw_batch_size,
                 predictor=model,
                 overlap=overlap,
             )
-            preds_batch = [
-                (torch.sigmoid(input=logits) >= 0.5).to(torch.float32)
-                for logits in logits_batch
-            ]
-            preds_batch = torch.vstack(tensors=preds_batch)
-            preds.append(preds_batch)
+            preds = (torch.sigmoid(input=logits) >= 0.5)
+            preds = preds.detach().cpu().to(torch.int8)
 
-    preds = torch.vstack(tensors=preds)
+    segs = []
+
+    for pred in preds:
+        seg = torch.zeros(size=pred.shape[1:], dtype=torch.int8)
+        seg[pred[1] == 1] = 2
+        seg[pred[0] == 1] = 1
+        seg[pred[2] == 1] = 4
+        segs.append(seg)
+
+    preds = torch.stack(tensors=segs, dim=0)
 
     return preds
