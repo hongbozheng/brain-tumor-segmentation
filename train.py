@@ -1,4 +1,3 @@
-import config
 import logger
 import numpy as np
 import torch
@@ -6,6 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from avg_meter import AverageMeter
 from data import *
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 from val import val_epoch
 
@@ -13,6 +13,7 @@ from val import val_epoch
 def train_epoch(
         model: nn.Module,
         train_loader: DataLoader,
+        device,
         loss_fn,
         optimizer: optim.Optimizer,
 ) -> float:
@@ -27,8 +28,8 @@ def train_epoch(
     loss_meter = AverageMeter()
 
     for idx, batch in enumerate(iterable=loader_tqdm):
-        data = batch["image"].to(device=config.DEVICE)
-        target = batch["label"].to(device=config.DEVICE)
+        data = batch["image"].to(device=device)
+        target = batch["label"].to(device=device)
         logits = model(data)
         loss = loss_fn(logits, target)
         loss.backward()
@@ -84,6 +85,7 @@ def train_model(
         avg_dice_loss = train_epoch(
             model=model,
             train_loader=train_loader,
+            device=device,
             loss_fn=loss_fn,
             optimizer=optimizer,
         )
@@ -92,6 +94,7 @@ def train_model(
         dice_scores = val_epoch(
             model=model,
             val_loader=val_loader,
+            device=device,
             roi=roi,
             sw_batch_size=sw_batch_size,
             overlap=overlap,
@@ -113,6 +116,6 @@ def train_model(
         #         f=ckpt_filepath,
         #     )
 
-        # scheduler.step()
+        scheduler.step()
 
     return

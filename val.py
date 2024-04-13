@@ -1,17 +1,18 @@
-import config
 import logger
 import numpy as np
 import torch
 import torch.nn as nn
 from avg_meter import AverageMeter
-from data import *
 from monai.inferers import sliding_window_inference
+import os
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 
 def val_epoch(
         model: nn.Module,
         val_loader: DataLoader,
+        device,
         roi: tuple[int, int, int],
         sw_batch_size: int,
         overlap: float,
@@ -29,8 +30,8 @@ def val_epoch(
 
     with torch.no_grad():
         for idx, batch in enumerate(iterable=loader_tqdm):
-            data = batch["image"].to(device=config.DEVICE)
-            target = batch["label"].to(device=config.DEVICE)
+            data = batch["image"].to(device=device)
+            target = batch["label"].to(device=device)
             logits_batch = sliding_window_inference(
                 inputs=data,
                 roi_size=roi,
@@ -67,11 +68,11 @@ def val_model(
         model: nn.Module,
         device,
         ckpt_filepath: str,
+        val_loader: DataLoader,
         roi: tuple[int, int, int],
         sw_batch_size: int,
         overlap: float,
         acc_fn,
-        val_loader: DataLoader,
 ) -> np.ndarray:
     model.to(device=device)
 
@@ -87,6 +88,7 @@ def val_model(
     dice_scores = val_epoch(
         model=model,
         val_loader=val_loader,
+        device=device,
         roi=roi,
         sw_batch_size=sw_batch_size,
         overlap=overlap,

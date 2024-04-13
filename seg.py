@@ -3,26 +3,22 @@
 
 import argparse
 import logger
-import numpy as np
-from config import SEED, DEVICE, MODEL_NAMES, get_config
-from data import train_val_split, val_transform
+import os
+import torch
+from config import DEVICE, MODEL_NAMES, get_config
+from data import image_label, val_transform
 from dataset import BraTS
-from monai.metrics import DiceMetric
-from monai.utils.enums import MetricReduction
 from nnformer.nnFormer import nnFormer
 from swin_unetr import SwinUNETR
 from torch.utils.data import DataLoader
 from unetr import UNETR
 from unetr_pp.unetr_pp import UNETR_PP
 from unet3d import UNet3D
-from val import val_model
+from inference import inference
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        prog="test",
-        description="inference val set with model and calculate average dice scores"
-    )
+def main():
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model",
         '-m',
@@ -31,9 +27,25 @@ def main() -> None:
         help="model names: 'swin', 'unetr', 'unetr_pp', 'nnformer', "
              "'unet3d'"
     )
+    parser.add_argument(
+        "--directory",
+        '-d',
+        type=str,
+        required=True,
+        help="directory containing 3D-MRI"
+    )
+    parser.add_argument(
+        "--filepath",
+        '-f',
+        type=str,
+        required=True,
+        help="inference results filepath"
+    )
 
     args = parser.parse_args()
     model_name = args.model
+    data_dir = args.directory
+    filepath = args.filepath
 
     if model_name not in MODEL_NAMES:
         logger.log_error("Invalid model name.")
@@ -127,48 +139,34 @@ def main() -> None:
         ckpt_filepath = config.BEST_MODEL.UNET3D
         roi = config.MODEL.UNET3D.ROI
 
-    # split data into train & val in dict format
-    _, val_data = train_val_split(
-        data_dir=config.DATA.DIR,
-        seed=SEED,
-        val_pct=config.DATA.VAL_PCT,
-    )
+    ids = os.listdir(path=data_dir)
+    ids.sort()
+    paths = [os.path.join(data_dir, id) for id in ids]
+    data = image_label(paths=paths)
 
     # dataset
-    val_dataset = BraTS(data=val_data, transform=val_transform)
+    dataset = BraTS(data=data, transform=val_transform)
 
     # dataloader
-    val_loader = DataLoader(
-        dataset=val_dataset,
+    loader = DataLoader(
+        dataset=dataset,
         batch_size=config.VAL.BATCH_SIZE,
         shuffle=False,
         num_workers=config.LOADER.NUM_WORKERS,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
 
-    # acc fn (val)
-    acc_fn = DiceMetric(
-        include_background=True,
-        reduction=MetricReduction.MEAN_BATCH,
-        get_not_nans=True,
-    )
-
-    dice_scores = val_model(
+    preds = inference(
         model=model,
         device=DEVICE,
         ckpt_filepath=ckpt_filepath,
-        val_loader=val_loader,
+        loader=loader,
         roi=roi,
         sw_batch_size=config.VAL.SW_BATCH_SIZE,
         overlap=config.VAL.OVERLAP,
-        acc_fn=acc_fn,
     )
-    avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
 
-    logger.log_info(f"TC  Dice Score: {dice_scores[0]:.6f}")
-    logger.log_info(f"WT  Dice Score: {dice_scores[1]:.6f}")
-    logger.log_info(f"ET  Dice Score: {dice_scores[2]:.6f}")
-    logger.log_info(f"Avg Dice Score: {avg_dice_score:.6f}")
+    torch.save(obj=preds, f=filepath)
 
     return
 

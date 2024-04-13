@@ -75,6 +75,7 @@ Dice Similarity Coefficient (Dice Score)
 │   ├── config.py                           <- configuration file
 │   ├── data.py                             <- data preprocess & dataloader
 │   ├── dataset.py                          <- BraTS Dataset
+│   ├── inference.py                        <- inference pipeline
 │   ├── logger.py                           <- log
 │   ├── lr_scheduler.py                     <- learning rate schedulers
 │   ├── README.md                           <- read me
