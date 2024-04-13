@@ -1,5 +1,7 @@
+import json
 import logger
 import numpy as np
+import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -57,6 +59,7 @@ def train_model(
         acc_fn,
         train_loader: DataLoader,
         val_loader: DataLoader,
+        stats_filepath: str,
 ) -> None:
     path, _ = os.path.split(p=ckpt_filepath)
     if not os.path.exists(path=path):
@@ -65,7 +68,9 @@ def train_model(
     model.to(device=device)
 
     start_epoch = 0
+    best_dice_score = 0.0
     avg_dice_losses = []
+    dice_scores = []
     avg_dice_scores = []
 
     if os.path.exists(path=ckpt_filepath):
@@ -74,7 +79,7 @@ def train_model(
         optimizer.load_state_dict(state_dict=ckpt["optimizer_state"])
         scheduler.load_state_dict(state_dict=ckpt["scheduler_state"])
         start_epoch = ckpt["epoch"]+1
-        avg_dice_scores.append(ckpt["best_dice"])
+        best_dice_score = ckpt["best_dice_score"]
         filename = os.path.basename(ckpt_filepath)
         logger.log_info(f"Loaded '{filename}'")
 
@@ -89,9 +94,7 @@ def train_model(
             loss_fn=loss_fn,
             optimizer=optimizer,
         )
-        avg_dice_losses.append(avg_dice_loss)
-
-        dice_scores = val_epoch(
+        dice_score = val_epoch(
             model=model,
             val_loader=val_loader,
             device=device,
@@ -100,22 +103,35 @@ def train_model(
             overlap=overlap,
             acc_fn=acc_fn,
         )
-        avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
-        avg_dice_scores.append(avg_dice_score)
+        avg_dice_losses.append(float(avg_dice_loss))
+        dice_scores.append(dice_score.tolist())
+        avg_dice_score = np.mean(a=dice_score, dtype=np.float32)
+        avg_dice_scores.append(float(avg_dice_score))
 
-        # if avg_dice_scores[-1] == max(avg_dice_scores):
-        #     torch.save(
-        #         obj={
-        #             "model_description": str(model),
-        #             "model_state": model.state_dict(),
-        #             "optimizer_state": optimizer.state_dict(),
-        #             "scheduler_state": scheduler.state_dict(),
-        #             "epoch": epoch,
-        #             "best_dice": avg_dice_scores[-1],
-        #         },
-        #         f=ckpt_filepath,
-        #     )
+        if avg_dice_score > best_dice_score:
+            torch.save(
+                obj={
+                    "model_description": str(model),
+                    "model_state": model.state_dict(),
+                    "optimizer_state": optimizer.state_dict(),
+                    "scheduler_state": scheduler.state_dict(),
+                    "epoch": epoch,
+                    "best_dice_score": avg_dice_score,
+                },
+                f=ckpt_filepath,
+            )
 
         scheduler.step()
+
+    stats = {
+        "epoch": list(range(start_epoch, n_epochs)),
+        "avg_dice_loss": avg_dice_losses,
+        "dice_score": dice_scores,
+        "avg_dice_score": avg_dice_scores,
+    }
+
+    json_file = open(file=stats_filepath, mode='w')
+    json.dump(obj=stats, fp=json_file, indent=4)
+    json_file.close()
 
     return

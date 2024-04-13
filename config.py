@@ -192,6 +192,7 @@ _C.TRAIN.N_EPOCHS = 100
 _C.TRAIN.WARMUP_EPOCHS = 15
 _C.TRAIN.WARMUP_START_LR = 1e-5
 _C.TRAIN.ETA_MIN = 1e-7
+_C.TRAIN.STATS_FILEPATH = "stats.json"
 
 
 # -----------------------------------------------------------------------------

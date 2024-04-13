@@ -1,10 +1,10 @@
 import logger
 import numpy as np
+import os
 import torch
 import torch.nn as nn
 from avg_meter import AverageMeter
 from monai.inferers import sliding_window_inference
-import os
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -17,7 +17,7 @@ def val_epoch(
         sw_batch_size: int,
         overlap: float,
         acc_fn,
-) -> float:
+) -> np.ndarray:
     model.eval()
 
     loader_tqdm = tqdm(iterable=val_loader, position=1)
@@ -39,11 +39,7 @@ def val_epoch(
                 predictor=model,
                 overlap=overlap,
             )
-            # Note: if batch size > 1, need decollect_batch
-            preds = [
-                (torch.sigmoid(input=logits) >= 0.5).to(torch.float32)
-                for logits in logits_batch
-            ]
+            preds = (torch.sigmoid(input=logits_batch) >= 0.5).to(torch.float32)
             acc_fn(y_pred=preds, y=target)
             accs, not_nans = acc_fn.aggregate()
             acc_meter.update(
@@ -85,7 +81,7 @@ def val_model(
         logger.log_error(f"Cannot find ckpt file at '{ckpt_filepath}'.")
         exit(1)
 
-    dice_scores = val_epoch(
+    dice_score = val_epoch(
         model=model,
         val_loader=val_loader,
         device=device,
@@ -94,6 +90,5 @@ def val_model(
         overlap=overlap,
         acc_fn=acc_fn,
     )
-    avg_dice_score = np.mean(a=dice_scores, dtype=np.float32)
 
-    return avg_dice_score
+    return dice_score
