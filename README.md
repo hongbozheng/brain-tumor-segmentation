@@ -78,7 +78,9 @@ Dice Similarity Coefficient (Dice Score)
 │   ├── logger.py                           <- log
 │   ├── lr_scheduler.py                     <- learning rate schedulers
 │   ├── README.md                           <- read me
+│   ├── seg.py                              <- predict segmentation results
 │   ├── swin_unetr.py                       <- Swin-UNETR
+│   ├── test.py                             <- calculate dice score of a model
 │   ├── train.py                            <- train epoch & training pipeline
 │   ├── train_nnformer.py                   <- nnFormer training script
 │   ├── train_swin_unetr.py                 <- Swin-UNETR training script
@@ -87,7 +89,7 @@ Dice Similarity Coefficient (Dice Score)
 │   ├── train_unetr_pp.py                   <- UNETR++ training script
 │   ├── unet3d.py                           <- 3D-UNet
 │   ├── unetr.py                            <- UNETR
-│   └── val.py                              <- validation epoch
+│   └── val.py                              <- val epoch & val (test) pipeline
 │
 ├── BraTS_2023 (dataset directory, 1251 folders)
 │   ├── BraTS-GLI-XXXXX-XXX                 <- 1 brain tumor segmentation subject
