@@ -22,6 +22,13 @@ train_transform = transforms.Compose(
             roi_size=config.DATA.ROI,
             random_size=False,
         ),
+        transforms.SpatialPadd(
+            keys=["image", "label"],
+            method="symmetric",
+            spatial_size=config.DATA.ROI,
+            padding_mode="constant",
+            value=0
+        ),
         transforms.RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=0),
         transforms.RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=1),
         transforms.RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=2),
