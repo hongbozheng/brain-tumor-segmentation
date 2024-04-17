@@ -26,8 +26,8 @@ train_transform = transforms.Compose(
             keys=["image", "label"],
             method="symmetric",
             spatial_size=config.DATA.ROI,
-            padding_mode="constant",
-            value=0
+            mode="constant",
+            value=0,
         ),
         transforms.RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=0),
         transforms.RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=1),
@@ -87,11 +87,18 @@ def image_label(paths: list[str]) -> list[dict]:
     return data
 
 
-def train_val_split(data_dir: str, seed: int, val_pct: float) -> tuple[list[dict], list[dict]]:
+def train_val_split(
+        data_dir: str,
+        seed: int,
+        val_pct: float
+) -> tuple[list[dict], list[dict]]:
     ids = os.listdir(path=data_dir)
     ids.sort()
 
-    paths = [os.path.join(data_dir, id) for id in ids]
+    paths = [
+        os.path.join(data_dir, id) for id in ids
+        if id not in configg.DATA.SKIP_IDS
+    ]
     data = image_label(paths=paths)
 
     random.seed(a=seed)

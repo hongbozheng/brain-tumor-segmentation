@@ -153,9 +153,14 @@ _C.BEST_MODEL.UNET3D = _C.BEST_MODEL.DIR + "/unet3d_best.ckpt"
 _C.DATA = CN()
 
 """ BraTS 2023 """
-_C.DATA.DIR = "../BraTS_2023"
+_C.DATA.DIR = "./BraTS_2023"
 _C.DATA.VAL_PCT = 0.2
 _C.DATA.ROI = [128, 128, 128]
+_C.DATA.SKIP_IDS = [
+    "BraTS-GLI-00818-000",
+    "BraTS-GLI-01462-000",
+    "BraTS-GLI-01486-000",
+]
 
 
 # -----------------------------------------------------------------------------
