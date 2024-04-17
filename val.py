@@ -32,14 +32,14 @@ def val_epoch(
         for idx, batch in enumerate(iterable=loader_tqdm):
             data = batch["image"].to(device=device)
             target = batch["label"].to(device=device)
-            logits_batch = sliding_window_inference(
+            logits = sliding_window_inference(
                 inputs=data,
                 roi_size=roi,
                 sw_batch_size=sw_batch_size,
                 predictor=model,
                 overlap=overlap,
             )
-            preds = (torch.sigmoid(input=logits_batch) >= 0.5).to(torch.float32)
+            preds = (torch.sigmoid(input=logits) >= 0.5).to(torch.float32)
             acc_fn(y_pred=preds, y=target)
             accs, not_nans = acc_fn.aggregate()
             acc_meter.update(
