@@ -97,7 +97,7 @@ def train_val_split(
 
     paths = [
         os.path.join(data_dir, id) for id in ids
-        if id not in configg.DATA.SKIP_IDS
+        if id not in config.DATA.SKIP_IDS
     ]
     data = image_label(paths=paths)
 
