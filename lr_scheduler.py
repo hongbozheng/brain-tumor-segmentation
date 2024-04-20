@@ -20,6 +20,19 @@ from torch.optim.lr_scheduler import LambdaLR, _LRScheduler
 __all__ = ["LinearLR", "ExponentialLR"]
 
 
+class PolyLR(_LRScheduler):
+    def __init__(self, optimizer, max_epochs, initial_lr, exponent=0.9):
+        self.max_epochs = max_epochs
+        self.initial_lr = initial_lr
+        self.exponent = exponent
+        super().__init__(optimizer)
+
+    def get_lr(self):
+        epoch = self.last_epoch + 1
+        return [self.initial_lr * (1 - epoch / self.max_epochs) ** self.exponent
+                for base_lr in self.base_lrs]
+
+
 class _LRSchedulerMONAI(_LRScheduler):
     """Base class for increasing the learning rate between two boundaries over a number
     of iterations"""

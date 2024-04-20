@@ -103,6 +103,9 @@ def train_model(
             overlap=overlap,
             acc_fn=acc_fn,
         )
+        print(f"[Epoch {epoch}]: lr {scheduler.get_last_lr()}")
+        print(f"[Epoch {epoch}]: avg dice loss {avg_dice_loss}")
+        print(f"[Epoch {epoch}]: dice score {dice_score}")
         avg_dice_losses.append(float(avg_dice_loss))
         dice_scores.append(dice_score.tolist())
         avg_dice_score = np.mean(a=dice_score, dtype=np.float32)
