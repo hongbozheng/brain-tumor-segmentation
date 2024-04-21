@@ -85,6 +85,8 @@ _C.MODEL.UNETR_PP.LR = 1e-2  # 3e-4
 _C.MODEL.UNETR_PP.MOMENTUM = 3e-5
 _C.MODEL.UNETR_PP.WEIGHT_DECAY = 0.99
 _C.MODEL.UNETR_PP.NESTEROV = True
+_C.MODEL.UNETR_PP.TOTAL_ITERS = 1000
+_C.MODEL.UNETR_PP.POWER = 0.9
 
 
 """ =============== nnFormer =============== """
@@ -143,7 +145,7 @@ _C.MODEL.UNET3D.WEIGHT_DECAY = 1e-4
 _C.BEST_MODEL = CN()
 
 """ Model """
-_C.BEST_MODEL.DIR = "models"
+_C.BEST_MODEL.DIR = "../../kani/kani-lab/user/hongboz2/models"
 _C.BEST_MODEL.SWIN = _C.BEST_MODEL.DIR + "/swin_unetr_best.ckpt"
 _C.BEST_MODEL.UNETR = _C.BEST_MODEL.DIR + "/unetr_best.ckpt"
 _C.BEST_MODEL.UNETR_PP = _C.BEST_MODEL.DIR + "/unetr_pp_best.ckpt"
@@ -157,7 +159,7 @@ _C.BEST_MODEL.UNET3D = _C.BEST_MODEL.DIR + "/unet3d_best.ckpt"
 _C.DATA = CN()
 
 """ BraTS 2023 """
-_C.DATA.DIR = "./BraTS_2023"
+_C.DATA.DIR = "../../kani/kani-lab/user/hongboz2/BraTS_2023"
 _C.DATA.VAL_PCT = 0.2
 _C.DATA.ROI = [128, 128, 128]
 _C.DATA.SKIP_IDS = [
@@ -173,8 +175,8 @@ _C.DATA.SKIP_IDS = [
 _C.LOADER = CN()
 
 """ DataLoader """
-_C.LOADER.NUM_WORKERS_TRAIN = 20
-_C.LOADER.NUM_WORKERS_VAL = 10
+_C.LOADER.NUM_WORKERS_TRAIN = 5
+_C.LOADER.NUM_WORKERS_VAL = 5
 _C.LOADER.PIN_MEMORY = True
 
 
@@ -198,7 +200,7 @@ _C.TRAIN = CN()
 
 """ Training """
 _C.TRAIN.BATCH_SIZE = 5
-_C.TRAIN.N_EPOCHS = 35
+_C.TRAIN.N_EPOCHS = 60
 _C.TRAIN.WARMUP_EPOCHS = 5
 _C.TRAIN.WARMUP_START_LR = 1e-5
 _C.TRAIN.ETA_MIN = 1e-7

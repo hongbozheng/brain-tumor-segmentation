@@ -4,7 +4,7 @@
 from config import SEED, DEVICE, get_config
 from data import train_val_split, train_transform, val_transform
 from dataset import BraTS
-from lr_scheduler import LinearWarmupCosineAnnealingLR, PolyLR
+from lr_scheduler import PolynomialLR #, LinearWarmupCosineAnnealingLR
 from monai.losses import DiceLoss
 from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
@@ -70,11 +70,12 @@ def main() -> None:
     )
 
     # define lr scheduler
-    scheduler = PolyLR(
+    scheduler = PolynomialLR(
         optimizer=optimizer,
-        max_epochs=config.TRAIN.N_EPOCHS,
-        initial_lr=config.MODEL.UNETR_PP.LR,
+        total_iters=config.MODEL.UNETR_PP.TOTAL_ITERS,
+        power=config.MODEL.UNETR_PP.POWER,
     )
+
     #scheduler = LinearWarmupCosineAnnealingLR(
     #    optimizer=optimizer,
     #    warmup_epochs=config.TRAIN.WARMUP_EPOCHS,

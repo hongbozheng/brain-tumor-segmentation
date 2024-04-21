@@ -20,17 +20,30 @@ from torch.optim.lr_scheduler import LambdaLR, _LRScheduler
 __all__ = ["LinearLR", "ExponentialLR"]
 
 
-class PolyLR(_LRScheduler):
-    def __init__(self, optimizer, max_epochs, initial_lr, exponent=0.9):
-        self.max_epochs = max_epochs
-        self.initial_lr = initial_lr
-        self.exponent = exponent
-        super().__init__(optimizer)
+class PolynomialLR(_LRScheduler):
+    def __init__(self, optimizer, total_iters=5, power=1.0, last_epoch=-1, verbose="deprecated"):
+        self.total_iters = total_iters
+        self.power = power
+        super().__init__(optimizer, last_epoch, verbose)
 
     def get_lr(self):
-        epoch = self.last_epoch + 1
-        return [self.initial_lr * (1 - epoch / self.max_epochs) ** self.exponent
-                for base_lr in self.base_lrs]
+        if not self._get_lr_called_within_step:
+            warnings.warn("To get the last learning rate computed by the scheduler, "
+                          "please use `get_last_lr()`.", UserWarning)
+
+        if self.last_epoch == 0 or self.last_epoch > self.total_iters:
+            return [group["lr"] for group in self.optimizer.param_groups]
+
+        decay_factor = ((1.0 - self.last_epoch / self.total_iters) / (1.0 - (self.last_epoch - 1) / self.total_iters)) ** self.power
+        return [group["lr"] * decay_factor for group in self.optimizer.param_groups]
+
+    def _get_closed_form_lr(self):
+        return [
+            (
+                base_lr * (1.0 - min(self.total_iters, self.last_epoch) / self.total_iters) ** self.power
+            )
+            for base_lr in self.base_lrs
+        ]
 
 
 class _LRSchedulerMONAI(_LRScheduler):
