@@ -32,7 +32,7 @@ def main() -> None:
     train_loader = DataLoader(
         dataset=train_dataset,
         batch_size=config.TRAIN.BATCH_SIZE,
-        shuffle=True,
+        shuffle=False,
         num_workers=config.LOADER.NUM_WORKERS_TRAIN,
         pin_memory=config.LOADER.PIN_MEMORY,
     )

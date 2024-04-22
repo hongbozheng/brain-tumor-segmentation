@@ -102,7 +102,7 @@ def train_val_split(
     data = image_label(paths=paths)
 
     random.seed(a=seed)
-    random.shuffle(x=ids)
+    random.shuffle(x=data)
 
     val_data = data[:int(len(data)*val_pct)]
     train_data = data[int(len(data)*val_pct):]
