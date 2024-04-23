@@ -78,6 +78,7 @@ def train_model(
         model.load_state_dict(state_dict=ckpt["model_state"])
         optimizer.load_state_dict(state_dict=ckpt["optimizer_state"])
         scheduler.load_state_dict(state_dict=ckpt["scheduler_state"])
+        scheduler.step()
         start_epoch = ckpt["epoch"]+1
         best_dice_score = ckpt["best_dice_score"]
         filename = os.path.basename(ckpt_filepath)
