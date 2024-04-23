@@ -1,3 +1,4 @@
+import logger
 import os
 import random
 from config import get_config
@@ -72,15 +73,27 @@ def image_label(paths: list[str]) -> list[dict]:
         files = os.listdir(path=path)
 
         d = {}
-        images = []
+        images = ["", "", "", ""]
+        label = ""
 
         for file in files:
             filename, _ = os.path.splitext(p=file)
             if filename.endswith("seg"):
-                d["label"] = os.path.join(path, file)
+                label = os.path.join(path, file)
             else:
-                images.append(os.path.join(path, file))
+                if filename.endswith("t2f"):
+                    images[0] = os.path.join(path, file)
+                elif filename.endswith("t1c"):
+                    images[1] = os.path.join(path, file)
+                elif filename.endswith("t1n"):
+                    images[2] = os.path.join(path, file)
+                elif filename.endswith("t2w"):
+                    images[3] = os.path.join(path, file)
+                else:
+                    logger.log_error("Invalid file!")
+
         d["image"] = images
+        d["label"] = label
 
         data.append(d)
 
