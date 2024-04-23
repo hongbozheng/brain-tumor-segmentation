@@ -1,5 +1,6 @@
 import torch
 from logger import LogLevel
+from monai.utils import set_determinism
 from yacs.config import CfgNode as CN
 
 
@@ -185,6 +186,7 @@ _C.LOADER.PIN_MEMORY = True
 # -----------------------------------------------------------------------------
 SEED = 42
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+set_determinism(seed=SEED)
 torch.manual_seed(seed=SEED)
 torch.cuda.manual_seed_all(seed=SEED)
 torch.backends.cudnn.benchmark = False

@@ -1,7 +1,7 @@
 import logger
 import os
 import random
-from config import get_config
+from config import SEED, get_config
 from monai import transforms
 
 
@@ -38,6 +38,7 @@ train_transform = transforms.Compose(
         transforms.RandShiftIntensityd(keys="image", offsets=0.1, prob=1.0),
     ]
 )
+train_transform.set_random_state(seed=SEED)
 
 
 # val (test) transform
@@ -48,6 +49,7 @@ val_transform = transforms.Compose(
         transforms.NormalizeIntensityd(keys="image", nonzero=True, channel_wise=True),
     ]
 )
+val_transform.set_random_state(seed=SEED)
 
 
 def image_label(paths: list[str]) -> list[dict]:
