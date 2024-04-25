@@ -112,6 +112,7 @@ def train_model(
         avg_dice_scores.append(float(avg_dice_score))
 
         if avg_dice_score > best_dice_score:
+            best_dice_score = avg_dice_score
             torch.save(
                 obj={
                     "model_description": str(model),
