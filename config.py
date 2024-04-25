@@ -31,7 +31,7 @@ _C.MODEL.SWIN.NORMALIZE = True
 _C.MODEL.SWIN.USE_CHECKPOINT = True
 _C.MODEL.SWIN.SPATIAL_DIMS = 3
 _C.MODEL.SWIN.DOWNSAMPLE = "mergingv2"
-_C.MODEL.SWIN.USE_V2 = True
+_C.MODEL.SWIN.USE_V2 = False
 
 """ AdamW """
 _C.MODEL.SWIN.LR = 1e-4
@@ -136,7 +136,7 @@ _C.MODEL.UNET3D.DIM = 3
 _C.MODEL.UNET3D.DEEP_SUPERVISION = False
 
 """ Adam """
-_C.MODEL.UNET3D.LR = 5e-4  # 7e-4 9e-4
+_C.MODEL.UNET3D.LR = 3e-4  # 7e-4 9e-4
 _C.MODEL.UNET3D.WEIGHT_DECAY = 1e-4
 
 
@@ -146,7 +146,7 @@ _C.MODEL.UNET3D.WEIGHT_DECAY = 1e-4
 _C.BEST_MODEL = CN()
 
 """ Model """
-_C.BEST_MODEL.DIR = "../../kani/kani-lab/user/hongboz2/models"
+_C.BEST_MODEL.DIR = "models"
 _C.BEST_MODEL.SWIN = _C.BEST_MODEL.DIR + "/swin_unetr_best.ckpt"
 _C.BEST_MODEL.UNETR = _C.BEST_MODEL.DIR + "/unetr_best.ckpt"
 _C.BEST_MODEL.UNETR_PP = _C.BEST_MODEL.DIR + "/unetr_pp_best.ckpt"
@@ -160,7 +160,7 @@ _C.BEST_MODEL.UNET3D = _C.BEST_MODEL.DIR + "/unet3d_best.ckpt"
 _C.DATA = CN()
 
 """ BraTS 2023 """
-_C.DATA.DIR = "../../kani/kani-lab/user/hongboz2/BraTS_2023"
+_C.DATA.DIR = "../BraTS_2023"
 _C.DATA.VAL_PCT = 0.2
 _C.DATA.ROI = [128, 128, 128]
 _C.DATA.SKIP_IDS = [
@@ -176,8 +176,8 @@ _C.DATA.SKIP_IDS = [
 _C.LOADER = CN()
 
 """ DataLoader """
-_C.LOADER.NUM_WORKERS_TRAIN = 5
-_C.LOADER.NUM_WORKERS_VAL = 5
+_C.LOADER.NUM_WORKERS_TRAIN = 4
+_C.LOADER.NUM_WORKERS_VAL = 4
 _C.LOADER.PIN_MEMORY = True
 
 
@@ -201,9 +201,9 @@ MODEL_NAMES = {"swin", "unetr", "unetr_pp", "nnformer", "unet3d"}
 _C.TRAIN = CN()
 
 """ Training """
-_C.TRAIN.BATCH_SIZE = 5
-_C.TRAIN.N_EPOCHS = 50
-_C.TRAIN.WARMUP_EPOCHS = 5
+_C.TRAIN.BATCH_SIZE = 2
+_C.TRAIN.N_EPOCHS = 200
+_C.TRAIN.WARMUP_EPOCHS = 50
 _C.TRAIN.WARMUP_START_LR = 1e-5
 _C.TRAIN.ETA_MIN = 1e-7
 _C.TRAIN.STATS_FILEPATH = "stats.json"
@@ -215,7 +215,7 @@ _C.TRAIN.STATS_FILEPATH = "stats.json"
 _C.VAL = CN()
 
 """ Validation """
-_C.VAL.BATCH_SIZE = 5
+_C.VAL.BATCH_SIZE = 2
 _C.VAL.SW_BATCH_SIZE = 4
 _C.VAL.OVERLAP = 0.5
 

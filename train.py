@@ -6,7 +6,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from avg_meter import AverageMeter
-from data import *
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from val import val_epoch

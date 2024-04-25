@@ -72,17 +72,19 @@ def main() -> None:
     # define lr scheduler
     scheduler = PolynomialLR(
         optimizer=optimizer,
-        total_iters=config.MODEL.UNETR_PP.TOTAL_ITERS,
+        total_iters=config.TRAIN.N_EPOCHS,
         power=config.MODEL.UNETR_PP.POWER,
     )
 
-    #scheduler = LinearWarmupCosineAnnealingLR(
-    #    optimizer=optimizer,
-    #    warmup_epochs=config.TRAIN.WARMUP_EPOCHS,
-    #    max_epochs=config.TRAIN.N_EPOCHS,
-    #    warmup_start_lr=config.TRAIN.WARMUP_START_LR,
-    #    eta_min=config.TRAIN.ETA_MIN,
-    #)
+    '''
+    scheduler = LinearWarmupCosineAnnealingLR(
+        optimizer=optimizer,
+        warmup_epochs=config.TRAIN.WARMUP_EPOCHS,
+        max_epochs=config.TRAIN.N_EPOCHS,
+        warmup_start_lr=config.TRAIN.WARMUP_START_LR,
+        eta_min=config.TRAIN.ETA_MIN,
+    )
+    '''
 
     # loss fn (train)
     loss_fn = DiceLoss(

@@ -40,6 +40,7 @@ def val_epoch(
                 overlap=overlap,
             )
             preds = (torch.sigmoid(input=logits) >= 0.5).to(torch.float32)
+            acc_fn.reset()
             acc_fn(y_pred=preds, y=target)
             accs, not_nans = acc_fn.aggregate()
             acc_meter.update(
