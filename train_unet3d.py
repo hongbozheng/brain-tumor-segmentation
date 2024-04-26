@@ -32,15 +32,15 @@ def main() -> None:
     train_loader = DataLoader(
         dataset=train_dataset,
         batch_size=config.TRAIN.BATCH_SIZE,
-        shuffle=True,
-        num_workers=config.LOADER.NUM_WORKERS,
+        shuffle=False,
+        num_workers=config.LOADER.NUM_WORKERS_TRAIN,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
     val_loader = DataLoader(
         dataset=val_dataset,
         batch_size=config.VAL.BATCH_SIZE,
         shuffle=False,
-        num_workers=config.LOADER.NUM_WORKERS,
+        num_workers=config.LOADER.NUM_WORKERS_VAL,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
 
