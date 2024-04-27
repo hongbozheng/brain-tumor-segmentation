@@ -4,7 +4,7 @@
 from config import SEED, DEVICE, get_config
 from data import train_val_split, train_transform, val_transform
 from dataset import BraTS
-from lr_scheduler import LinearWarmupCosineAnnealingLR
+# from lr_scheduler import LinearWarmupCosineAnnealingLR
 from monai.losses import DiceLoss
 from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
@@ -32,15 +32,15 @@ def main() -> None:
     train_loader = DataLoader(
         dataset=train_dataset,
         batch_size=config.TRAIN.BATCH_SIZE,
-        shuffle=True,
-        num_workers=config.LOADER.NUM_WORKERS,
+        shuffle=False,
+        num_workers=config.LOADER.NUM_WORKERS_TRAIN,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
     val_loader = DataLoader(
         dataset=val_dataset,
         batch_size=config.VAL.BATCH_SIZE,
         shuffle=False,
-        num_workers=config.LOADER.NUM_WORKERS,
+        num_workers=config.LOADER.NUM_WORKERS_VAL,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
 
@@ -64,18 +64,36 @@ def main() -> None:
     )
 
     # define optimizer
+    optimizer = optim.SGD(
+        params=model.parameters(),
+        lr=config.MODEL.UNETR.LR,
+        momentum=config.MODEL.UNETR.MOMENTUM,
+        weight_decay=config.MODEL.UNETR.WEIGHT_DECAY,
+        nesterov=config.MODEL.UNETR.NESTEROV,
+    )
+
+    '''
     optimizer = optim.AdamW(
         params=model.parameters(),
         lr=config.MODEL.UNETR.LR,
         weight_decay=config.MODEL.UNETR.WEIGHT_DECAY,
     )
+    '''
 
     # define lr scheduler
+    '''
     scheduler = LinearWarmupCosineAnnealingLR(
         optimizer=optimizer,
         warmup_epochs=config.TRAIN.WARMUP_EPOCHS,
         max_epochs=config.TRAIN.N_EPOCHS,
         warmup_start_lr=config.TRAIN.WARMUP_START_LR,
+        eta_min=config.TRAIN.ETA_MIN,
+    )
+    '''
+
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer=optimizer,
+        T_max=config.TRAIN.N_EPOCHS,
         eta_min=config.TRAIN.ETA_MIN,
     )
 
