@@ -4,7 +4,7 @@
 from config import SEED, DEVICE, get_config
 from data import train_val_split, train_transform, val_transform
 from dataset import BraTS
-from lr_scheduler import PolynomialLR #, LinearWarmupCosineAnnealingLR
+# from lr_scheduler import PolynomialLR, LinearWarmupCosineAnnealingLR
 from monai.losses import DiceLoss
 from monai.metrics import DiceMetric
 from monai.utils.enums import MetricReduction
@@ -69,14 +69,22 @@ def main() -> None:
         nesterov=config.MODEL.UNETR_PP.NESTEROV,
     )
 
+    '''
+    optimizer = optim.AdamW(
+        params=model.parameters(),
+        lr=config.MODEL.UNETR_PP.LR,
+        weight_decay=config.MODEL.UNETR_PP.WEIGHT_DECAY,
+    )
+    '''
+
     # define lr scheduler
+    '''
     scheduler = PolynomialLR(
         optimizer=optimizer,
         total_iters=config.TRAIN.N_EPOCHS,
         power=config.MODEL.UNETR_PP.POWER,
     )
 
-    '''
     scheduler = LinearWarmupCosineAnnealingLR(
         optimizer=optimizer,
         warmup_epochs=config.TRAIN.WARMUP_EPOCHS,
@@ -85,6 +93,11 @@ def main() -> None:
         eta_min=config.TRAIN.ETA_MIN,
     )
     '''
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer=optimizer,
+        T_max=config.TRAIN.N_EPOCHS,
+        eta_min=config.TRAIN.ETA_MIN,
+    )
 
     # loss fn (train)
     loss_fn = DiceLoss(
