@@ -35,6 +35,8 @@ def inference(
         refresh=True
     )
 
+    segs = []
+
     with torch.no_grad():
         for idx, batch in enumerate(iterable=loader_tqdm):
             data = batch["image"].to(device=device)
@@ -45,18 +47,20 @@ def inference(
                 predictor=model,
                 overlap=overlap,
             )
-            preds = (torch.sigmoid(input=logits) >= 0.5)
-            preds = preds.detach().cpu().to(torch.int8)
+            pred = (torch.sigmoid(input=logits) >= 0.5)
+            pred = pred.detach().cpu().to(torch.int8)
 
-    segs = []
+            seg = torch.zeros(size=pred.shape[1:], dtype=torch.int8)
+            seg[pred[1] == 1] = 2
+            seg[pred[0] == 1] = 1
+            seg[pred[2] == 1] = 3
+            segs.append(seg)
 
-    for pred in preds:
-        seg = torch.zeros(size=pred.shape[1:], dtype=torch.int8)
-        seg[pred[1] == 1] = 2
-        seg[pred[0] == 1] = 1
-        seg[pred[2] == 1] = 4
-        segs.append(seg)
+            loader_tqdm.set_description(
+                desc=f"[Batch {idx+1}]",
+                refresh=True
+            )
 
-    preds = torch.stack(tensors=segs, dim=0)
+    segs = torch.stack(tensors=segs, dim=0)
 
-    return preds
+    return segs

@@ -150,13 +150,13 @@ def main():
     # dataloader
     loader = DataLoader(
         dataset=dataset,
-        batch_size=config.VAL.BATCH_SIZE,
+        batch_size=1,
         shuffle=False,
         num_workers=config.LOADER.NUM_WORKERS,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
 
-    preds = inference(
+    segs = inference(
         model=model,
         device=DEVICE,
         ckpt_filepath=ckpt_filepath,
@@ -166,7 +166,7 @@ def main():
         overlap=config.VAL.OVERLAP,
     )
 
-    torch.save(obj=preds, f=filepath)
+    torch.save(obj=segs, f=filepath)
 
     return
 
