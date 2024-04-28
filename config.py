@@ -145,9 +145,17 @@ _C.MODEL.UNET3D.NORM = "instancenorm3d"
 _C.MODEL.UNET3D.DIM = 3
 _C.MODEL.UNET3D.DEEP_SUPERVISION = False
 
+""" SGD """
+_C.MODEL.UNET3D.LR = 1e-4  # 1e-2
+_C.MODEL.UNET3D.MOMENTUM = 3e-5
+_C.MODEL.UNET3D.WEIGHT_DECAY = 0.99
+_C.MODEL.UNET3D.NESTEROV = True
+
 """ Adam """
+'''
 _C.MODEL.UNET3D.LR = 2e-4  # 7e-4 9e-4
 _C.MODEL.UNET3D.WEIGHT_DECAY = 1e-4
+'''
 
 
 # -----------------------------------------------------------------------------
