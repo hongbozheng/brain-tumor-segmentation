@@ -46,6 +46,18 @@ val_transform = transforms.Compose(
     [
         transforms.LoadImaged(keys=["image", "label"]),
         transforms.ConvertToMultiChannelBasedOnBratsClassesd(keys="label"),
+        transforms.CropForegroundd(
+            keys=["image", "label"],
+            source_key="image",
+            k_divisible=[1, 1, 1],
+        ),
+        # transforms.SpatialPadd(
+        #     keys=["image", "label"],
+        #     method="symmetric",
+        #     spatial_size=[167, 208, 153],
+        #     mode="constant",
+        #     value=0,
+        # )
         transforms.NormalizeIntensityd(keys="image", nonzero=True, channel_wise=True),
     ]
 )
