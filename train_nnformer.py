@@ -67,6 +67,20 @@ def main() -> None:
         nesterov=config.MODEL.NNFORMER.NESTEROV,
     )
 
+    '''
+    optimizer = optim.AdamW(
+        params=model.parameters(),
+        lr=config.MODEL.NNFORMER.LR,
+        weight_decay=config.MODEL.NNFORMER.WEIGHT_DECAY,
+    )
+
+    optimizer = optim.Adam(
+        params=model.parameters(),
+        lr=config.MODEL.NNFORMER.LR,
+        weight_decay=config.MODEL.NNFORMER.WEIGHT_DECAY,
+    )
+    '''
+
     # define lr scheduler
     '''
     scheduler = LinearWarmupCosineAnnealingLR(
@@ -76,7 +90,6 @@ def main() -> None:
         warmup_start_lr=config.TRAIN.WARMUP_START_LR,
         eta_min=config.TRAIN.ETA_MIN,
     )
-    '''
 
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer=optimizer,
@@ -87,6 +100,13 @@ def main() -> None:
         cooldown=config.TRAIN.COOLDOWN,
         min_lr=config.TRAIN.ETA_MIN,
         eps=config.TRAIN.EPS,
+    )
+    '''
+
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer=optimizer,
+        T_max=config.TRAIN.N_EPOCHS,
+        eta_min=config.TRAIN.ETA_MIN,
     )
 
     # loss fn (train)

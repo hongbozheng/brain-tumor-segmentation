@@ -93,13 +93,6 @@ def main() -> None:
         eta_min=config.TRAIN.ETA_MIN,
     )
 
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(
-        optimizer=optimizer,
-        T_max=config.TRAIN.N_EPOCHS,
-        eta_min=config.TRAIN.ETA_MIN,
-    )
-    '''
-
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer=optimizer,
         mode=config.TRAIN.MODE,
@@ -110,6 +103,13 @@ def main() -> None:
         cooldown=config.TRAIN.COOLDOWN,
         min_lr=config.TRAIN.ETA_MIN,
         eps=config.TRAIN.EPS,
+    )
+    '''
+
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer=optimizer,
+        T_max=config.TRAIN.N_EPOCHS,
+        eta_min=config.TRAIN.ETA_MIN,
     )
 
     # loss fn (train)

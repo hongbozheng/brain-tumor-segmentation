@@ -56,6 +56,7 @@ def main() -> None:
     )
 
     # define optimizer
+    '''
     optimizer = optim.SGD(
         params=model.parameters(),
         lr=config.MODEL.UNET3D.LR,
@@ -64,12 +65,12 @@ def main() -> None:
         nesterov=config.MODEL.UNET3D.NESTEROV,
     )
     '''
+
     optimizer = optim.Adam(
         params=model.parameters(),
         lr=config.MODEL.UNET3D.LR,
         weight_decay=config.MODEL.UNET3D.WEIGHT_DECAY,
     )
-    '''
 
     # define lr scheduler
     '''
@@ -81,13 +82,6 @@ def main() -> None:
         eta_min=config.TRAIN.ETA_MIN,
     )
 
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(
-        optimizer=optimizer,
-        T_max=config.TRAIN.N_EPOCHS,
-        eta_min=config.TRAIN.ETA_MIN,
-    )
-    '''
-
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer=optimizer,
         mode=config.TRAIN.MODE,
@@ -98,6 +92,13 @@ def main() -> None:
         cooldown=config.TRAIN.COOLDOWN,
         min_lr=config.TRAIN.ETA_MIN,
         eps=config.TRAIN.EPS,
+    )
+    '''
+
+    scheduler = optim.lr_scheduler.CosineAnnealingLR(
+        optimizer=optimizer,
+        T_max=config.TRAIN.N_EPOCHS,
+        eta_min=config.TRAIN.ETA_MIN,
     )
 
     # loss fn (train)

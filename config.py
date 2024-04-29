@@ -34,7 +34,7 @@ _C.MODEL.SWIN.DOWNSAMPLE = "mergingv2"
 _C.MODEL.SWIN.USE_V2 = False
 
 """ AdamW """
-_C.MODEL.SWIN.LR = 1e-4
+_C.MODEL.SWIN.LR = 1e-6
 _C.MODEL.SWIN.WEIGHT_DECAY = 1e-5
 
 
@@ -119,6 +119,12 @@ _C.MODEL.NNFORMER.MOMENTUM = 3e-5
 _C.MODEL.NNFORMER.WEIGHT_DECAY = 0.99
 _C.MODEL.NNFORMER.NESTEROV = True
 
+""" AdamW """
+'''
+_C.MODEL.NNFORMER.LR = 1e-5
+_C.MODEL.NNFORMER.WEIGHT_DECAY = 1e-5
+'''
+
 
 """ =============== UNet3D =============== """
 _C.MODEL.UNET3D = CN()
@@ -146,16 +152,16 @@ _C.MODEL.UNET3D.DIM = 3
 _C.MODEL.UNET3D.DEEP_SUPERVISION = False
 
 """ SGD """
+''''
 _C.MODEL.UNET3D.LR = 1e-4  # 1e-2
 _C.MODEL.UNET3D.MOMENTUM = 3e-5
 _C.MODEL.UNET3D.WEIGHT_DECAY = 0.99
 _C.MODEL.UNET3D.NESTEROV = True
+'''
 
 """ Adam """
-'''
-_C.MODEL.UNET3D.LR = 2e-4  # 7e-4 9e-4
+_C.MODEL.UNET3D.LR = 1e-4  # 7e-4 9e-4
 _C.MODEL.UNET3D.WEIGHT_DECAY = 1e-4
-'''
 
 
 # -----------------------------------------------------------------------------
@@ -227,7 +233,7 @@ _C.TRAIN.PATIENCE = 5
 _C.TRAIN.THRESHOLD = 1e-4
 _C.TRAIN.THRESHOLD_MODE = "rel"
 _C.TRAIN.COOLDOWN = 0
-_C.TRAIN.EPS = 1e-8
+_C.TRAIN.EPS = 1e-7
 _C.TRAIN.WARMUP_EPOCHS = 1
 _C.TRAIN.WARMUP_START_LR = 1e-5
 _C.TRAIN.ETA_MIN = 1e-8

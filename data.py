@@ -57,7 +57,7 @@ val_transform = transforms.Compose(
         #     spatial_size=[167, 208, 153],
         #     mode="constant",
         #     value=0,
-        # )
+        # ),
         transforms.NormalizeIntensityd(keys="image", nonzero=True, channel_wise=True),
     ]
 )
