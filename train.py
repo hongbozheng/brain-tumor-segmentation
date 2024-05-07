@@ -68,6 +68,7 @@ def train_model(
 
     start_epoch = 0
     best_dice_score = 0.0
+    # cnt = 0
     avg_dice_losses = []
     dice_scores = []
     avg_dice_scores = []
@@ -124,6 +125,12 @@ def train_model(
                 },
                 f=ckpt_filepath,
             )
+
+        # if scheduler.get_last_lr() == 1e-8:
+        #     if abs(avg_dice_scores[-2]-avg_dice_score) < 1e-5:
+        #         cnt += 1
+        #     if cnt == 5:
+        #         break
 
         scheduler.step()
 

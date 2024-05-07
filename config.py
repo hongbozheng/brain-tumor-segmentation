@@ -225,7 +225,7 @@ MODEL_NAMES = {"swin", "unetr", "unetr_pp", "nnformer", "unet3d"}
 _C.TRAIN = CN()
 
 """ Training """
-_C.TRAIN.BATCH_SIZE = 1
+_C.TRAIN.BATCH_SIZE = 2
 _C.TRAIN.N_EPOCHS = 100
 _C.TRAIN.MODE = "max"
 _C.TRAIN.FACTOR = 1e-1
