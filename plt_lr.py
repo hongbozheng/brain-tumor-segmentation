@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 from config import get_config
 import matplotlib.pyplot as plt
 import seaborn as sns

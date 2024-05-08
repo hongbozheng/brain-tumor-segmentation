@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 import argparse
 import json
 import matplotlib.pyplot as plt
@@ -56,12 +59,14 @@ def plot(filepath: str) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(prog='plt', description="plot statistics")
-    parser.add_argument("--filepath",
-                        "-f",
-                        type=str,
-                        required=True,
-                        help="path to json file")
+    parser = argparse.ArgumentParser(prog="plt", description="plot statistics")
+    parser.add_argument(
+        "--filepath",
+        "-f",
+        type=str,
+        required=True,
+        help="path to json file"
+    )
     args = parser.parse_args()
     filepath = args.filepath
 
