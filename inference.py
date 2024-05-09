@@ -2,6 +2,7 @@ import logger
 import os
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from monai.inferers import sliding_window_inference
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -48,7 +49,7 @@ def inference(
                 overlap=overlap,
             )
             pred = (torch.sigmoid(input=logits) >= 0.5)
-            pred = pred.detach().cpu().to(torch.int8)
+            pred = pred[0].detach().cpu().to(torch.int8)
 
             seg = torch.zeros(size=pred.shape[1:], dtype=torch.int8)
             seg[pred[1] == 1] = 2
@@ -61,6 +62,26 @@ def inference(
                 refresh=True
             )
 
-    segs = torch.stack(tensors=segs, dim=0)
+    x = max(seg.shape[0] for seg in segs)
+    y = max(seg.shape[1] for seg in segs)
+    z = max(seg.shape[2] for seg in segs)
 
-    return segs
+    segs_pad = []
+    for seg in segs:
+        x_pad = x - seg.shape[0]
+        y_pad = y - seg.shape[1]
+        z_pad = z - seg.shape[2]
+
+        xl = x_pad // 2
+        xr = x_pad - xl
+        yt = y_pad // 2
+        yb = y_pad - yt
+        zf = z_pad // 2
+        zb = z_pad -zf
+
+        seg = F.pad(input=seg, pad=(zf, zb, yt, yb, xl, xr))
+        segs_pad.append(seg)
+
+    segs_pad = torch.stack(tensors=segs_pad, dim=0)
+
+    return segs_pad

@@ -152,7 +152,7 @@ def main():
         dataset=dataset,
         batch_size=1,
         shuffle=False,
-        num_workers=config.LOADER.NUM_WORKERS,
+        num_workers=config.LOADER.NUM_WORKERS_VAL,
         pin_memory=config.LOADER.PIN_MEMORY,
     )
 
