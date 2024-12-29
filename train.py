@@ -21,10 +21,7 @@ def train_epoch(
     model.train(mode=True)
 
     loader_tqdm = tqdm(iterable=train_loader, position=1)
-    loader_tqdm.set_description(
-        desc=f"[Batch 0]",
-        refresh=True
-    )
+    loader_tqdm.set_description(desc=f"[Batch 0]", refresh=True)
 
     loss_meter = AverageMeter()
 

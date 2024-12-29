@@ -21,10 +21,7 @@ def val_epoch(
     model.eval()
 
     loader_tqdm = tqdm(iterable=val_loader, position=1)
-    loader_tqdm.set_description(
-        desc=f"[Batch 0]",
-        refresh=True
-    )
+    loader_tqdm.set_description(desc=f"[Batch 0]", refresh=True)
 
     acc_meter = AverageMeter()
 
@@ -55,7 +52,7 @@ def val_epoch(
             loader_tqdm.set_description(
                 desc=f"[Batch {idx+1}]: dice_tc {dice_tc:.4f} dice_wt {dice_wt:.4f} "
                      f"dice_et {dice_et:.4f} avg_dice {avg_dice:.4f}",
-                refresh=True
+                refresh=True,
             )
 
     return acc_meter.avg

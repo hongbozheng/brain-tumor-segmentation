@@ -31,10 +31,7 @@ def inference(
     model.eval()
 
     loader_tqdm = tqdm(iterable=loader, position=1)
-    loader_tqdm.set_description(
-        desc=f"[Batch 0]",
-        refresh=True
-    )
+    loader_tqdm.set_description(desc=f"[Batch 0]", refresh=True)
 
     segs = []
 
