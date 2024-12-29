@@ -1,7 +1,7 @@
 # Brain Tumor Segmentation
 
 ## Models
-#### Transformer
+### Transformer
 - Swin-UNETR
   - `swin_unetr.py`
   - [GitHub](https://github.com/Project-MONAI/MONAI/blob/dev/monai/networks/nets/swin_unetr.py) & [paper](https://arxiv.org/abs/2201.01266)
@@ -16,31 +16,31 @@
   - `nnformer/`
   - [GitHub](https://github.com/282857341/nnFormer) & [paper](https://arxiv.org/abs/2109.03201)
 
-#### CNN
+### CNN
 - 3D-UNet
   - `unet3d.py`
   - [GitHub](https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Segmentation/nnUNet) & [paper](https://arxiv.org/abs/2110.03352)
 
 ## Data
-#### BraTS_2023
+### BraTS_2023
 [Kaggle BraTS_2023 Part 1](https://www.kaggle.com/datasets/aiocta/brats2023-part-1) &
 [Kaggle BraTS_2023 Part 2](https://www.kaggle.com/datasets/aiocta/brats2023-part-2zip)
 
 1. Download and unzip both files.
 2. Create directory `BraTS_2023` and move all files into this directory.
 
-##### Statistics
+#### Statistics
 - `Total #`: 1251
 - `Train #`: 1001 (~80%)
 - `Val #`: 250 (~20%)
 - `Total Size`: 147.44GB
 
-##### Labels
+#### Labels
 - `label 1` -> necrotic and non-enhancing tumor core
 - `label 2` -> peritumoral edema
 - `label 4` -> GD-enhancing tumor
 
-##### Classes
+#### Classes
 - `TC` -> Tumor Core
   - `Label 1` & `Label 4`
 - `WT` -> Whole Tumor
@@ -49,10 +49,10 @@
   - `Label 4`
 
 ## Train Models
-#### Train Configuration
+### Train Configuration
 To modify train configuration, check `config.py` file.
 
-#### Train
+### Train
 To train 3D-UNet.
 ```
 ./train_unet3d.py
@@ -71,7 +71,7 @@ Fine-tune Swin-UNETR.
 ```
 
 ## Models
-#### Saved models
+### Saved models
 Saved models will be in `models` directory.
 
 ## Evaluation
@@ -79,10 +79,10 @@ The evaluation is performed both quantitatively and qualitatively.
 - Dice Similarity Coefficient (Dice Score)
 - Visual Segmentation Results
 
-#### Evaluation Configuration
+### Evaluation Configuration
 To modify test configuration, check `config.py` file.
 
-#### Evaluate
+### Evaluate
 To evaluate models.
 ```
 ./main.py -m <model name> -d <directory> -f <filepath>
