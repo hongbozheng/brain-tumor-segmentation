@@ -215,7 +215,7 @@ torch.manual_seed(seed=SEED)
 torch.cuda.manual_seed_all(seed=SEED)
 torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
-LOG_LEVEL = LogLevel.info
+LOG_LEVEL = LogLevel.INFO
 MODEL_NAMES = {"swin", "unetr", "unetr_pp", "nnformer", "unet3d"}
 
 
